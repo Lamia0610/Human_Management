@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html
+  lang="vi"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tài Liệu Công Ty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      main {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
+      }
+
+      .document-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+      }
+
+      .document-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border-left-color: #3b82f6;
+      }
+
+      .category-filter {
+        transition: all 0.2s ease;
+      }
+
+      .category-filter.active {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+      }
+
+      .resource-section {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .search-box {
+        transition: all 0.3s ease;
+      }
+
+      .search-box:focus {
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+      }
+
+      .file-type-badge {
+        transition: all 0.2s ease;
+      }
+
+      .file-type-badge:hover {
+        transform: scale(1.05);
+      }
+
+      .tab-active {
+        border-bottom: 3px solid #3b82f6;
+        color: #3b82f6;
+        font-weight: 600;
+      }
+
+      .stat-card {
+        transition: all 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <main layout:fragment="content" class="py-8 px-4 sm:px-6 lg:px-8">
+    <!-- Header Section -->
+    <div class="max-w-7xl mx-auto mb-8">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">
+            <span class="gradient-text">Thư Viện Tài Liệu</span> Công Ty
+          </h1>
+          <p class="text-gray-600 mt-2">
+            Kho tài liệu và tài nguyên nội bộ dành cho nhân viên
+          </p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="relative">
+            <input
+              type="text"
+              placeholder="Tìm kiếm tài liệu..."
+              class="search-box w-64 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <span class="absolute right-3 top-2.5 text-gray-400">🔍</span>
+          </div>
+          <button
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            onclick="window.location.href='/upload'"
+          >
+            + Tải lên
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="max-w-7xl mx-auto mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="stat-card bg-white p-6 rounded-2xl shadow-lg text-center">
+          <div class="text-3xl font-bold text-blue-600 mb-2">1,258</div>
+          <div class="text-gray-600">Tài liệu</div>
+        </div>
+        <div class="stat-card bg-white p-6 rounded-2xl shadow-lg text-center">
+          <div class="text-3xl font-bold text-green-600 mb-2">45</div>
+          <div class="text-gray-600">Danh mục</div>
+        </div>
+        <div class="stat-card bg-white p-6 rounded-2xl shadow-lg text-center">
+          <div class="text-3xl font-bold text-purple-600 mb-2">2.5GB</div>
+          <div class="text-gray-600">Dung lượng</div>
+        </div>
+        <div class="stat-card bg-white p-6 rounded-2xl shadow-lg text-center">
+          <div class="text-3xl font-bold text-orange-600 mb-2">89%</div>
+          <div class="text-gray-600">Được sử dụng</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="max-w-7xl mx-auto mb-8">
+      <div class="flex space-x-8 border-b border-gray-200">
+        <button class="tab-active pb-3 px-1 text-lg font-medium">Tất cả</button>
+        <button
+          class="text-gray-500 pb-3 px-1 text-lg font-medium hover:text-gray-700"
+        >
+          Mới nhất
+        </button>
+        <button
+          class="text-gray-500 pb-3 px-1 text-lg font-medium hover:text-gray-700"
+        >
+          Phổ biến
+        </button>
+        <button
+          class="text-gray-500 pb-3 px-1 text-lg font-medium hover:text-gray-700"
+        >
+          Của tôi
+        </button>
+      </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="max-w-7xl mx-auto mb-8">
+      <div class="flex flex-wrap gap-3">
+        <button
+          class="category-filter active px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium"
+        >
+          Tất cả
+        </button>
+        <button
+          class="category-filter px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200"
+        >
+          Chính sách
+        </button>
+        <button
+          class="category-filter px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200"
+        >
+          Quy trình
+        </button>
+        <button
+          class="category-filter px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200"
+        >
+          Mẫu biểu
+        </button>
+        <button
+          class="category-filter px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200"
+        >
+          Báo cáo
+        </button>
+        <button
+          class="category-filter px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200"
+        >
+          Đào tạo
+        </button>
+      </div>
+    </div>
+
+    <!-- Documents Grid -->
+    <div class="max-w-7xl mx-auto mb-12">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Document 1 -->
+        <div class="document-card bg-white rounded-2xl shadow-lg p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div
+              class="file-type-badge w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center"
+            >
+              <span class="text-xl text-blue-600">📄</span>
+            </div>
+            <span
+              class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium"
+              >Mới</span
+            >
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">
+            Sổ Tay Nhân Viên 2024
+          </h3>
+          <p class="text-gray-600 text-sm mb-4">
+            Hướng dẫn toàn diện về văn hóa công ty, chính sách và quy trình làm
+            việc.
+          </p>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span
+                class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center"
+              >
+                <span class="text-sm">👤</span>
+              </span>
+              <span class="text-sm text-gray-600">HR Department</span>
+            </div>
+            <span class="text-xs text-gray-500">PDF • 2.3MB</span>
+          </div>
+          <div class="mt-4 flex space-x-2">
+            <button
+              class="flex-1 bg-blue-600 text-white py-2 rounded text-sm font-medium hover:bg-blue-700 transition-colors"
+            >
+              Xem
+            </button>
+            <button
+              class="flex-1 bg-gray-100 text-gray-700 py-2 rounded text-sm font-medium hover:bg-gray-200 transition-colors"
+            >
+              Tải về
+            </button>
+          </div>
+        </div>
+
+        <!-- Document 2 -->
+        <div class="document-card bg-white rounded-2xl shadow-lg p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div
+              class="file-type-badge w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center"
+            >
+              <span class="text-xl text-red-600">📊</span>
+            </div>
+            <span
+              class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-medium"
+              >Quan trọng</span
+            >
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">
+            Quy Trình Phê Duyệt Dự Án
+          </h3>
+          <p class="text-gray-600 text-sm mb-4">
+            Hướng dẫn chi tiết quy trình phê duyệt và quản lý dự án nội bộ.
+          </p>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span
+                class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center"
+              >
+                <span class="text-sm">👔</span>
+              </span>
+              <span class="text-sm text-gray-600">PMO Team</span>
+            </div>
+            <span class="text-xs text-gray-500">DOCX • 1.1MB</span>
+          </div>
+          <div class="mt-4 flex space-x-2">
+            <button
+              class="flex-1 bg-blue-600 text-white py-2 rounded text-sm font-medium hover:bg-blue-700 transition-colors"
+            >
+              Xem
+            </button>
+            <button
+              class="flex-1 bg-gray-100 text-gray-700 py-2 rounded text-sm font-medium hover:bg-gray-200 transition-colors"
+            >
+              Tải về
+            </button>
+          </div>
+        </div>
+
+        <!-- Document 3 -->
+        <div class="document-card bg-white rounded-2xl shadow-lg p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div
+              class="file-type-badge w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center"
+            >
+              <span class="text-xl text-green-600">🎥</span>
+            </div>
+            <span
+              class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium"
+              >Video</span
+            >
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">
+            Training Security Awareness
+          </h3>
+          <p class="text-gray-600 text-sm mb-4">
+            Video đào tạo về an ninh mạng và bảo mật thông tin cho nhân viên.
+          </p>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span
+                class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center"
+              >
+                <span class="text-sm">🛡️</span>
+              </span>
+              <span class="text-sm text-gray-600">IT Security</span>
+            </div>
+            <span class="text-xs text-gray-500">MP4 • 45MB</span>
+          </div>
+          <div class="mt-4 flex space-x-2">
+            <button
+              class="flex-1 bg-blue-600 text-white py-2 rounded text-sm font-medium hover:bg-blue-700 transition-colors"
+            >
+              Xem
+            </button>
+            <button
+              class="flex-1 bg-gray-100 text-gray-700 py-2 rounded text-sm font-medium hover:bg-gray-200 transition-colors"
+            >
+              Tải về
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Resources -->
+    <div class="max-w-7xl mx-auto mb-12">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Tài Nguyên Mới Nhất</h2>
+
+      <div class="resource-section p-6">
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="text-center">
+            <div
+              class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <span class="text-2xl text-blue-600">📋</span>
+            </div>
+            <h4 class="font-semibold text-gray-900 mb-2">Mẫu Đơn</h4>
+            <p class="text-sm text-gray-600">25 templates</p>
+          </div>
+
+          <div class="text-center">
+            <div
+              class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <span class="text-2xl text-green-600">📈</span>
+            </div>
+            <h4 class="font-semibold text-gray-900 mb-2">Báo Cáo</h4>
+            <p class="text-sm text-gray-600">48 files</p>
+          </div>
+
+          <div class="text-center">
+            <div
+              class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <span class="text-2xl text-purple-600">🎓</span>
+            </div>
+            <h4 class="font-semibold text-gray-900 mb-2">Training</h4>
+            <p class="text-sm text-gray-600">32 courses</p>
+          </div>
+
+          <div class="text-center">
+            <div
+              class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <span class="text-2xl text-orange-600">⚙️</span>
+            </div>
+            <h4 class="font-semibold text-gray-900 mb-2">Quy Trình</h4>
+            <p class="text-sm text-gray-600">67 documents</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Access -->
+    <div class="max-w-7xl mx-auto mb-12">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Truy Cập Nhanh</h2>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <a
+          href="#"
+          class="bg-white p-6 rounded-2xl shadow-lg text-center hover:shadow-xl transition-shadow"
+        >
+          <div
+            class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4"
+          >
+            <span class="text-xl text-blue-600">🏢</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 mb-2">Văn Bản Pháp Luật</h4>
+          <p class="text-sm text-gray-600">Giấy phép và hợp đồng</p>
+        </a>
+
+        <a
+          href="#"
+          class="bg-white p-6 rounded-2xl shadow-lg text-center hover:shadow-xl transition-shadow"
+        >
+          <div
+            class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4"
+          >
+            <span class="text-xl text-green-600">👥</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 mb-2">Nhân Sự</h4>
+          <p class="text-sm text-gray-600">Chính sách nhân sự</p>
+        </a>
+
+        <a
+          href="#"
+          class="bg-white p-6 rounded-2xl shadow-lg text-center hover:shadow-xl transition-shadow"
+        >
+          <div
+            class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4"
+          >
+            <span class="text-xl text-purple-600">💼</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 mb-2">Tài Chính</h4>
+          <p class="text-sm text-gray-600">Báo cáo tài chính</p>
+        </a>
+
+        <a
+          href="#"
+          class="bg-white p-6 rounded-2xl shadow-lg text-center hover:shadow-xl transition-shadow"
+        >
+          <div
+            class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4"
+          >
+            <span class="text-xl text-orange-600">🛡️</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 mb-2">Bảo Mật</h4>
+          <p class="text-sm text-gray-600">Chính sách bảo mật</p>
+        </a>
+      </div>
+    </div>
+
+    <!-- Upload Guidelines -->
+    <div class="max-w-7xl mx-auto">
+      <div class="bg-white rounded-2xl shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Hướng Dẫn Tải Lên</h2>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-4">Quy định chung</h4>
+            <ul class="space-y-3 text-gray-700">
+              <li class="flex items-center">
+                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                Chỉ tải lên tài liệu liên quan đến công việc
+              </li>
+              <li class="flex items-center">
+                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                Đặt tên file rõ ràng và dễ hiểu
+              </li>
+              <li class="flex items-center">
+                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                Chọn đúng danh mục cho tài liệu
+              </li>
+              <li class="flex items-center">
+                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                Kiểm tra bản quyền trước khi tải lên
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-4">Định dạng hỗ trợ</h4>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex items-center">
+                <span class="text-blue-600 mr-2">📄</span>
+                <span class="text-sm">PDF</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-green-600 mr-2">📝</span>
+                <span class="text-sm">DOC/DOCX</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-yellow-600 mr-2">📊</span>
+                <span class="text-sm">XLS/XLSX</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-purple-600 mr-2">🖼️</span>
+                <span class="text-sm">PPT/PPTX</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-red-600 mr-2">🎥</span>
+                <span class="text-sm">MP4</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-gray-600 mr-2">📷</span>
+                <span class="text-sm">JPG/PNG</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+          <div class="flex items-center">
+            <span class="text-blue-600 text-xl mr-3">ℹ️</span>
+            <p class="text-sm text-blue-800">
+              <strong>Lưu ý:</strong> Tất cả tài liệu tải lên sẽ được kiểm duyệt
+              trước khi công khai. Vui lòng tuân thủ các chính sách bảo mật của
+              công ty.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Xử lý tabs navigation
+      document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll(".flex.space-x-8 button");
+        const categoryFilters = document.querySelectorAll(".category-filter");
+
+        // Tab click handler
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", function () {
+            tabs.forEach((t) =>
+              t.classList.remove("tab-active", "text-gray-900")
+            );
+            tabs.forEach((t) => t.classList.add("text-gray-500"));
+            this.classList.remove("text-gray-500");
+            this.classList.add("tab-active", "text-gray-900");
+          });
+        });
+
+        // Category filter click handler
+        categoryFilters.forEach((filter) => {
+          filter.addEventListener("click", function () {
+            categoryFilters.forEach((f) =>
+              f.classList.remove("active", "bg-blue-600", "text-white")
+            );
+            categoryFilters.forEach((f) =>
+              f.classList.add("bg-gray-100", "text-gray-700")
+            );
+            this.classList.remove("bg-gray-100", "text-gray-700");
+            this.classList.add("active", "bg-blue-600", "text-white");
+          });
+        });
+
+        // Document action handlers
+        document.querySelectorAll(".document-card button").forEach((button) => {
+          button.addEventListener("click", function () {
+            const docTitle =
+              this.closest(".document-card").querySelector("h3").textContent;
+            const action = this.textContent.trim();
+
+            if (action === "Xem") {
+              alert(`Đang mở tài liệu: ${docTitle}`);
+            } else if (action === "Tải về") {
+              alert(`Đang tải về tài liệu: ${docTitle}`);
+            }
+          });
+        });
+
+        // Search functionality
+        const searchBox = document.querySelector(".search-box");
+        searchBox.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            alert(`Đang tìm kiếm: "${this.value}"`);
+            this.value = "";
+          }
+        });
+
+        // Upload button
+        document
+          .querySelector('button:contains("+ Tải lên")')
+          .addEventListener("click", function () {
+            alert("Mở modal tải lên tài liệu mới");
+          });
+      });
+    </script>
+  </main>
+</html>

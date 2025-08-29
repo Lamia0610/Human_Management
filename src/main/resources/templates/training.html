@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chương Trình Thực Tập - Công Ty Chúng Tôi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
+      }
+
+      .program-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+      }
+
+      .program-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border-left-color: #3b82f6;
+      }
+
+      .benefit-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+      }
+
+      .benefit-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      }
+
+      .timeline-item {
+        position: relative;
+        padding-left: 3rem;
+      }
+
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: 1rem;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+      }
+
+      .timeline-dot {
+        position: absolute;
+        left: 0.75rem;
+        top: 0.5rem;
+        width: 0.5rem;
+        height: 0.5rem;
+        background: #3b82f6;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 0 0 3px #3b82f6;
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .apply-form {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .stat-card {
+        transition: all 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .pulse-button {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body class="py-8 px-4 sm:px-6 lg:px-8">
+    <!-- Hero Section -->
+    <div class="max-w-7xl mx-auto mb-16">
+      <div class="text-center">
+        <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+          <span class="gradient-text">Chương Trình Thực Tập</span> Dành Cho Bạn
+        </h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+          Khởi đầu sự nghiệp với trải nghiệm thực tế và cơ hội phát triển chuyên
+          môn tại môi trường làm việc chuyên nghiệp
+        </p>
+
+        <div class="relative max-w-4xl mx-auto mb-12">
+          <img
+            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/44401aef-1607-448c-b9d3-79a632db9b96.png"
+            alt="Nhóm thực tập sinh trẻ trung đang làm việc cùng nhau trong không gian văn phòng hiện đại với mentor hướng dẫn"
+            class="rounded-2xl shadow-2xl w-full"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="max-w-7xl mx-auto mb-16">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="stat-card bg-white p-6 rounded-2xl shadow-lg text-center">
+          <div class="text-3xl font-bold text-blue-600 mb-2">85%</div>
+          <div class="text-gray-600">Tỷ lệ được nhận làm chính thức</div>
+        </div>
+        <div class="stat-card bg-white p-6 rounded-2xl shadow-lg text-center">
+          <div class="text-3xl font-bold text-green-600 mb-2">200+</div>
+          <div class="text-gray-600">Thực tập sinh mỗi năm</div>
+        </div>
+        <div class="stat-card bg-white p-6 rounded-2xl shadow-lg text-center">
+          <div class="text-3xl font-bold text-purple-600 mb-2">4.8⭐</div>
+          <div class="text-gray-600">Đánh giá từ thực tập sinh</div>
+        </div>
+        <div class="stat-card bg-white p-6 rounded-2xl shadow-lg text-center">
+          <div class="text-3xl font-bold text-orange-600 mb-2">12+</div>
+          <div class="text-gray-600">Chương trình đào tạo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Programs Section -->
+    <div class="max-w-7xl mx-auto mb-20">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">
+          Chương Trình Thực Tập
+        </h2>
+        <p class="text-lg text-gray-600">
+          Lựa chọn chương trình phù hợp với nguyện vọng và kỹ năng của bạn
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Program 1 -->
+        <div class="program-card bg-white rounded-2xl shadow-lg p-6">
+          <div
+            class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-4"
+          >
+            <span class="text-2xl text-blue-600">💻</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">
+            Thực Tập Công Nghệ
+          </h3>
+          <p class="text-gray-600 mb-4">
+            Phát triển kỹ năng lập trình, thiết kế hệ thống và làm việc với các
+            công nghệ hiện đại.
+          </p>
+          <div class="space-y-2 mb-4">
+            <div class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+              Lập trình viên Fullstack
+            </div>
+            <div class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+              Data Science & AI
+            </div>
+            <div class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+              DevOps & Cloud
+            </div>
+          </div>
+          <button
+            class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            Tìm hiểu thêm
+          </button>
+        </div>
+
+        <!-- Program 2 -->
+        <div class="program-card bg-white rounded-2xl shadow-lg p-6">
+          <div
+            class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-4"
+          >
+            <span class="text-2xl text-green-600">📊</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">
+            Thực Tập Kinh Doanh
+          </h3>
+          <p class="text-gray-600 mb-4">
+            Trải nghiệm thực tế trong lĩnh vực kinh doanh, marketing và phát
+            triển chiến lược.
+          </p>
+          <div class="space-y-2 mb-4">
+            <div class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+              Marketing Digital
+            </div>
+            <div class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+              Phân tích Kinh doanh
+            </div>
+            <div class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+              Quản lý Dự án
+            </div>
+          </div>
+          <button
+            class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+          >
+            Tìm hiểu thêm
+          </button>
+        </div>
+
+        <!-- Program 3 -->
+        <div class="program-card bg-white rounded-2xl shadow-lg p-6">
+          <div
+            class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-4"
+          >
+            <span class="text-2xl text-purple-600">🎨</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">
+            Thực Tập Sáng Tạo
+          </h3>
+          <p class="text-gray-600 mb-4">
+            Khám phá thế giới thiết kế, sáng tạo nội dung và phát triển sản phẩm
+            số.
+          </p>
+          <div class="space-y-2 mb-4">
+            <div class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+              UI/UX Design
+            </div>
+            <div class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+              Sáng tạo Nội dung
+            </div>
+            <div class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+              Product Management
+            </div>
+          </div>
+          <button
+            class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+          >
+            Tìm hiểu thêm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="max-w-7xl mx-auto mb-20">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">
+          Lợi Ích Khi Thực Tập
+        </h2>
+        <p class="text-lg text-gray-600">
+          Những giá trị bạn nhận được từ chương trình thực tập
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="benefit-item p-6 text-center">
+          <div
+            class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <span class="text-xl text-blue-600">👨‍🏫</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 mb-2">Mentor 1:1</h4>
+          <p class="text-gray-600 text-sm">
+            Được hướng dẫn bởi chuyên gia giàu kinh nghiệm
+          </p>
+        </div>
+
+        <div class="benefit-item p-6 text-center">
+          <div
+            class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <span class="text-xl text-green-600">💰</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 mb-2">Lương Thưởng</h4>
+          <p class="text-gray-600 text-sm">
+            Mức lương cạnh tranh và phúc lợi hấp dẫn
+          </p>
+        </div>
+
+        <div class="benefit-item p-6 text-center">
+          <div
+            class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <span class="text-xl text-purple-600">📜</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 mb-2">Chứng Chỉ</h4>
+          <p class="text-gray-600 text-sm">
+            Chứng nhận hoàn thành chương trình thực tập
+          </p>
+        </div>
+
+        <div class="benefit-item p-6 text-center">
+          <div
+            class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <span class="text-xl text-orange-600">🚀</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 mb-2">Cơ Hội Việc Làm</h4>
+          <p class="text-gray-600 text-sm">
+            Ưu tiên tuyển dụng sau khi tốt nghiệp
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Process -->
+    <div class="max-w-7xl mx-auto mb-20">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">
+          Quy Trình Ứng Tuyển
+        </h2>
+        <p class="text-lg text-gray-600">
+          Các bước đơn giản để tham gia chương trình thực tập
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="text-center">
+          <div
+            class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4"
+          >
+            <span class="text-2xl text-blue-600">📝</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 mb-2">1. Nộp Đơn</h4>
+          <p class="text-gray-600 text-sm">Điền form ứng tuyển và gửi CV</p>
+        </div>
+
+        <div class="text-center">
+          <div
+            class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4"
+          >
+            <span class="text-2xl text-green-600">💬</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 mb-2">2. Phỏng Vấn</h4>
+          <p class="text-gray-600 text-sm">Phỏng vấn với quản lý và team</p>
+        </div>
+
+        <div class="text-center">
+          <div
+            class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4"
+          >
+            <span class="text-2xl text-purple-600">✅</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 mb-2">3. Nhận Offer</h4>
+          <p class="text-gray-600 text-sm">Nhận thư mời thực tập</p>
+        </div>
+
+        <div class="text-center">
+          <div
+            class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4"
+          >
+            <span class="text-2xl text-orange-600">🎉</span>
+          </div>
+          <h4 class="font-semibold text-gray-900 mb-2">4. Bắt Đầu</h4>
+          <p class="text-gray-600 text-sm">Onboarding và bắt đầu thực tập</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="max-w-4xl mx-auto mb-20">
+      <div class="bg-white rounded-2xl shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-8">
+          Lộ Trình Thực Tập 3 Tháng
+        </h2>
+
+        <div class="space-y-8">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <h4 class="font-semibold text-gray-900 mb-2">
+              Tuần 1-2: Onboarding
+            </h4>
+            <p class="text-gray-600">
+              Làm quen với công ty, team và công cụ làm việc
+            </p>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <h4 class="font-semibold text-gray-900 mb-2">
+              Tuần 3-8: Học tập & Thực hành
+            </h4>
+            <p class="text-gray-600">
+              Tham gia training và bắt đầu làm dự án thực tế
+            </p>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <h4 class="font-semibold text-gray-900 mb-2">
+              Tuần 9-11: Dự án Cá nhân
+            </h4>
+            <p class="text-gray-600">
+              Tự chủ động thực hiện và hoàn thành dự án
+            </p>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <h4 class="font-semibold text-gray-900 mb-2">Tuần 12: Tổng kết</h4>
+            <p class="text-gray-600">
+              Presentation và đánh giá kết quả thực tập
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Form -->
+    <div class="max-w-4xl mx-auto mb-20">
+      <div class="apply-form p-8">
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            Ứng Tuyển Thực Tập
+          </h2>
+          <p class="text-lg text-gray-600">
+            Điền thông tin để bắt đầu hành trình thực tập của bạn
+          </p>
+        </div>
+
+        <form class="space-y-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Họ và Tên *</label
+              >
+              <input
+                type="text"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Email *</label
+              >
+              <input
+                type="email"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Số Điện Thoại *</label
+              >
+              <input
+                type="tel"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Trường Học *</label
+              >
+              <input
+                type="text"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Chuyên Ngành *</label
+              >
+              <input
+                type="text"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Chương trình quan tâm *</label
+              >
+              <select
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Chọn chương trình...</option>
+                <option value="tech">Thực Tập Công Nghệ</option>
+                <option value="business">Thực Tập Kinh Doanh</option>
+                <option value="creative">Thực Tập Sáng Tạo</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >CV của bạn *</label
+            >
+            <div
+              class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center"
+            >
+              <div class="mb-4">
+                <span class="text-3xl">📄</span>
+              </div>
+              <p class="text-gray-600 mb-2">
+                Kéo thả file CV vào đây hoặc click để chọn
+              </p>
+              <p class="text-sm text-gray-500">PDF, DOC, DOCX (tối đa 5MB)</p>
+              <input type="file" class="hidden" id="cv-upload" />
+              <button
+                type="button"
+                onclick="document.getElementById('cv-upload').click()"
+                class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Chọn File
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >Thư Giới Thiệu</label
+            >
+            <textarea
+              rows="4"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Giới thiệu về bản thân, kỹ năng và lý do muốn thực tập..."
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors pulse-button"
+          >
+            Gửi Đơn Ứng Tuyển
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-white rounded-2xl shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-8">
+          Câu Hỏi Thường Gặp
+        </h2>
+
+        <div class="space-y-6">
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-2">
+              Ai có thể ứng tuyển thực tập?
+            </h4>
+            <p class="text-gray-600">
+              Sinh viên năm 3, năm 4 hoặc mới tốt nghiệp không quá 6 tháng từ
+              các trường Đại học, Cao đẳng.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-2">
+              Thời gian thực tập bao lâu?
+            </h4>
+            <p class="text-gray-600">
+              Chương trình thực tập kéo dài 3 tháng, làm việc full-time hoặc
+              part-time linh hoạt.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-2">
+              Có được trả lương không?
+            </h4>
+            <p class="text-gray-600">
+              Có, thực tập sinh sẽ nhận mức lương cạnh tranh và các phúc lợi
+              khác theo quy định công ty.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-2">
+              Khi nào có kết quả ứng tuyển?
+            </h4>
+            <p class="text-gray-600">
+              Chúng tôi sẽ phản hồi trong vòng 7-10 ngày làm việc sau khi nhận
+              đơn ứng tuyển.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Xử lý form ứng tuyển
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const fileInput = document.getElementById("cv-upload");
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Kiểm tra form hợp lệ
+          const requiredFields = form.querySelectorAll(
+            "input[required], select[required]"
+          );
+          let isValid = true;
+
+          requiredFields.forEach((field) => {
+            if (!field.value.trim()) {
+              isValid = false;
+              field.classList.add("border-red-500");
+            } else {
+              field.classList.remove("border-red-500");
+            }
+          });
+
+          if (!isValid) {
+            alert("Vui lòng điền đầy đủ thông tin bắt buộc!");
+            return;
+          }
+
+          if (!fileInput.files.length) {
+            alert("Vui lòng tải lên CV của bạn!");
+            return;
+          }
+
+          // Mô phỏng gửi form thành công
+          alert(
+            "Đơn ứng tuyển thực tập của bạn đã được gửi thành công! Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất."
+          );
+          form.reset();
+        });
+
+        // Xử lý hiển thị tên file khi chọn
+        fileInput.addEventListener("change", function () {
+          if (this.files.length) {
+            const fileName = this.files[0].name;
+            alert(`Đã chọn file: ${fileName}`);
+          }
+        });
+
+        // Xử lý nút tìm hiểu thêm
+        document.querySelectorAll(".program-card button").forEach((button) => {
+          button.addEventListener("click", function () {
+            const programTitle =
+              this.closest(".program-card").querySelector("h3").textContent;
+            alert(`Bạn quan tâm đến chương trình: ${programTitle}`);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
