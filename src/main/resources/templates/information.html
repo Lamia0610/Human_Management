@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout.html}">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tiếp nhận phản hồi</title>
+    <style>
+      #feedbackPage {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f5f9ff;
+        color: #333;
+      }
+      #feedbackPage header {
+        background: #1e88e5;
+        color: #fff;
+        padding: 15px;
+        text-align: center;
+      }
+      #feedbackPage .content {
+        max-width: 800px;
+        margin: 20px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      #feedbackPage h2 {
+        color: #1e88e5;
+      }
+      #feedbackPage label {
+        display: block;
+        margin: 8px 0 5px;
+      }
+      #feedbackPage textarea,
+      #feedbackPage input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+      #feedbackPage button {
+        background: #1e88e5;
+        color: #fff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      #feedbackPage button:hover {
+        background: #1565c0;
+      }
+      #feedbackPage .feedback-list {
+        margin-top: 25px;
+      }
+      #feedbackPage .feedback-item {
+        border: 1px solid #ccc;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        background: #f9f9f9;
+      }
+      #feedbackPage .status {
+        font-weight: bold;
+        color: #1565c0;
+      }
+      #feedbackPage select {
+        margin-top: 8px;
+        padding: 5px;
+      }
+    </style>
+  </head>
+
+  <main layout:fragment="content" id="feedbackPage">
+    <header>
+      <h1>📩 Tiếp nhận phản hồi nhân viên</h1>
+    </header>
+
+    <div class="content">
+      <h2>Gửi phản hồi</h2>
+      <form id="feedbackForm">
+        <label for="name">Họ tên</label>
+        <input type="text" id="name" required />
+
+        <label for="message">Nội dung phản hồi</label>
+        <textarea id="message" rows="4" required></textarea>
+
+        <button type="submit">Gửi phản hồi</button>
+      </form>
+
+      <div class="feedback-list">
+        <h2>Danh sách phản hồi</h2>
+        <div id="feedbackContainer"></div>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById("feedbackForm");
+      const feedbackContainer = document.getElementById("feedbackContainer");
+
+      // Lưu phản hồi
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const name = document.getElementById("name").value.trim();
+        const message = document.getElementById("message").value.trim();
+
+        if (name && message) {
+          addFeedback(name, message, "Đang chờ duyệt");
+          form.reset();
+        }
+      });
+
+      // Hàm thêm phản hồi vào danh sách
+      function addFeedback(name, message, status) {
+        const div = document.createElement("div");
+        div.classList.add("feedback-item");
+
+        div.innerHTML = `
+        <p><strong>${name}</strong>: ${message}</p>
+        <p>Trạng thái: <span class="status">${status}</span></p>
+        <label>Đổi trạng thái: 
+          <select onchange="updateStatus(this)">
+            <option ${status === "Đang chờ duyệt" ? "selected" : ""}>Đang chờ duyệt</option>
+            <option ${status === "Đã duyệt" ? "selected" : ""}>Đã duyệt</option>
+            <option ${status === "Đã xử lý" ? "selected" : ""}>Đã xử lý</option>
+          </select>
+        </label>
+      `;
+        feedbackContainer.prepend(div);
+      }
+
+      // Cập nhật trạng thái
+      function updateStatus(selectEl) {
+        const statusSpan = selectEl
+          .closest(".feedback-item")
+          .querySelector(".status");
+        statusSpan.textContent = selectEl.value;
+      }
+    </script>
+  </main>
+</html>
