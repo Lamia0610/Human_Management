@@ -1,207 +1,326 @@
 <!DOCTYPE html>
-<html lang="vi"
+<html
+  lang="vi"
   xmlns:th="http://www.thymeleaf.org"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layout.html}">
-<head>
-  <meta charset="UTF-8">
-  <title>Trang Chấm Công</title>
-  <style>
-    #attendancePage {font-family: Arial, sans-serif; margin:0; padding:0; background:#f0f6ff;}
-    #attendancePage header {background:#007bff; color:white; padding:15px; text-align:center;}
-    #attendancePage nav {display:flex; background:#0056b3;}
-    #attendancePage nav button {flex:1; padding:10px; background:#0056b3; color:white; border:none; cursor:pointer;}
-    #attendancePage nav button.active {background:#003f7f;}
-    #attendancePage section {display:none; padding:20px;}
-    #attendancePage section.active {display:block;}
-    #attendancePage h2 {color:#0056b3;}
+  layout:decorate="~{layout.html}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Trang Chấm Công</title>
+    <style>
+      #attendancePage {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f0f6ff;
+      }
+      #attendancePage header {
+        background: #007bff;
+        color: white;
+        padding: 15px;
+        text-align: center;
+      }
+      #attendancePage nav {
+        display: flex;
+        background: #0056b3;
+      }
+      #attendancePage nav button {
+        flex: 1;
+        padding: 10px;
+        background: #0056b3;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      #attendancePage nav button.active {
+        background: #003f7f;
+      }
+      #attendancePage section {
+        display: none;
+        padding: 20px;
+      }
+      #attendancePage section.active {
+        display: block;
+      }
+      #attendancePage h2 {
+        color: #0056b3;
+      }
 
-    /* Calendar */
-    #attendancePage #calendar {margin-top:20px;}
-    #attendancePage .calendar {display:grid; grid-template-columns:repeat(7,1fr); gap:5px;}
-    #attendancePage .calendar div {background:white; padding:10px; text-align:center; border-radius:4px; border:1px solid #ccc;}
-    #attendancePage .calendar .today {background:#cce5ff; font-weight:bold; color:#0056b3;}
-    #attendancePage .calendar .dayname {background:#007bff; color:white; font-weight:bold;}
+      /* Calendar */
+      #attendancePage #calendar {
+        margin-top: 20px;
+      }
+      #attendancePage .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+      }
+      #attendancePage .calendar div {
+        background: white;
+        padding: 10px;
+        text-align: center;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+      #attendancePage .calendar .today {
+        background: #cce5ff;
+        font-weight: bold;
+        color: #0056b3;
+      }
+      #attendancePage .calendar .dayname {
+        background: #007bff;
+        color: white;
+        font-weight: bold;
+      }
 
-    #attendancePage table {width:100%; border-collapse:collapse; margin-top:15px;}
-    #attendancePage table, 
-    #attendancePage th, 
-    #attendancePage td {border:1px solid #ccc;}
-    #attendancePage th, 
-    #attendancePage td {padding:8px; text-align:center;}
+      #attendancePage table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+      #attendancePage table,
+      #attendancePage th,
+      #attendancePage td {
+        border: 1px solid #ccc;
+      }
+      #attendancePage th,
+      #attendancePage td {
+        padding: 8px;
+        text-align: center;
+      }
 
-    #attendancePage textarea {width:100%; height:80px; margin-top:10px;}
-    #attendancePage button.action {background:#007bff; color:white; border:none; padding:8px 12px; margin:5px; cursor:pointer; border-radius:4px;}
-    #attendancePage button.action:hover {background:#0056b3;}
+      #attendancePage textarea {
+        width: 100%;
+        height: 80px;
+        margin-top: 10px;
+      }
+      #attendancePage button.action {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      #attendancePage button.action:hover {
+        background: #0056b3;
+      }
 
-    #attendancePage #status {margin-top:15px; padding:10px; background:#e9f3ff; border:1px solid #007bff; border-radius:4px;}
-    #attendancePage #datetime {margin-top:10px; font-weight:bold; color:#27ae60;}
+      #attendancePage #status {
+        margin-top: 15px;
+        padding: 10px;
+        background: #e9f3ff;
+        border: 1px solid #007bff;
+        border-radius: 4px;
+      }
+      #attendancePage #datetime {
+        margin-top: 10px;
+        font-weight: bold;
+        color: #27ae60;
+      }
+    </style>
+  </head>
+  <main layout:fragment="content" id="attendancePage">
+    <header>
+      <h1>Hệ Thống Chấm Công</h1>
+    </header>
 
-  </style>
-</head>
-<main layout:fragment="content" id="attendancePage"> 
-  <header>
-    <h1>Hệ Thống Chấm Công</h1>
-  </header>
+    <nav>
+      <button class="tab active" data-target="checkin">Chấm công</button>
+      <button class="tab" data-target="timesheet">Bảng công</button>
+      <button class="tab" data-target="feedback">Gửi phản hồi</button>
+    </nav>
 
-  <nav>
-    <button class="tab active" data-target="checkin">Chấm công</button>
-    <button class="tab" data-target="timesheet">Bảng công</button>
-    <button class="tab" data-target="feedback">Gửi phản hồi</button>
-  </nav>
+    <!-- Chấm công -->
+    <section id="checkin" class="active">
+      <h2>Chấm công</h2>
+      <label>Mã/Tên nhân viên: <input id="empName" type="text" /></label
+      ><br /><br />
+      <button class="action" onclick="checkIn()">Vào làm</button>
+      <button class="action" onclick="checkOut()">Kết thúc (Ra)</button>
+      <div id="status">Trạng thái hiện tại: Chưa chấm công</div>
+      <div id="datetime"></div>
 
-  <!-- Chấm công -->
-  <section id="checkin" class="active">
-    <h2>Chấm công</h2>
-    <label>Mã/Tên nhân viên: <input id="empName" type="text"></label><br><br>
-    <button class="action" onclick="checkIn()">Vào làm</button>
-    <button class="action" onclick="checkOut()">Kết thúc (Ra)</button>
-    <div id="status">Trạng thái hiện tại: Chưa chấm công</div>
-    <div id="datetime"></div>
+      <div id="calendar">
+        <h3>Lịch tháng</h3>
+        <div id="calendarGrid" class="calendar"></div>
+      </div>
+    </section>
 
-    <div id="calendar">
-      <h3>Lịch tháng</h3>
-      <div id="calendarGrid" class="calendar"></div>
-    </div>
-  </section>
+    <!-- Bảng công -->
+    <section id="timesheet">
+      <h2>Bảng công</h2>
+      <table id="table">
+        <thead>
+          <tr>
+            <th>Ngày</th>
+            <th>Nhân viên</th>
+            <th>Vào làm</th>
+            <th>Kết thúc</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
 
-  <!-- Bảng công -->
-  <section id="timesheet">
-    <h2>Bảng công</h2>
-    <table id="table">
-      <thead>
-        <tr><th>Ngày</th><th>Nhân viên</th><th>Vào làm</th><th>Kết thúc</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
+    <!-- Phản hồi -->
+    <section id="feedback">
+      <h2>Gửi phản hồi</h2>
+      <textarea
+        id="feedbackText"
+        placeholder="Mô tả sai sót về chấm công..."
+      ></textarea
+      ><br />
+      <button class="action" onclick="sendFeedback()">Gửi</button>
+      <div id="feedbackStatus"></div>
+    </section>
 
-  <!-- Phản hồi -->
-  <section id="feedback">
-    <h2>Gửi phản hồi</h2>
-    <textarea id="feedbackText" placeholder="Mô tả sai sót về chấm công..."></textarea><br>
-    <button class="action" onclick="sendFeedback()">Gửi</button>
-    <div id="feedbackStatus"></div>
-  </section>
+    <script>
+      let records = JSON.parse(localStorage.getItem("attendance")) || [];
+      let currentStatus = "Chưa chấm công";
 
-  <script>
-    let records = JSON.parse(localStorage.getItem("attendance")) || [];
-    let currentStatus = "Chưa chấm công";
+      function saveRecords() {
+        localStorage.setItem("attendance", JSON.stringify(records));
+      }
 
-    function saveRecords() {
-      localStorage.setItem("attendance", JSON.stringify(records));
-    }
+      function refreshTodayState() {
+        document.getElementById("status").innerText =
+          "Trạng thái hiện tại: " + currentStatus;
+      }
 
-    function refreshTodayState(){
-      document.getElementById("status").innerText = "Trạng thái hiện tại: " + currentStatus;
-    }
-
-    function checkIn(){
-      const name = document.getElementById("empName").value;
-      if(!name){alert("Nhập tên nhân viên"); return;}
-      const now = new Date();
-      const record = {date: now.toLocaleDateString(), name, checkIn: now.toLocaleTimeString(), checkOut:""};
-      records.push(record);
-      saveRecords();
-      currentStatus = "Đã vào làm lúc " + record.checkIn;
-      refreshTodayState();
-      renderTable();
-      renderCalendar(now.getFullYear(), now.getMonth());
-    }
-
-    function checkOut(){
-      const name = document.getElementById("empName").value;
-      if(!name){alert("Nhập tên nhân viên"); return;}
-      const now = new Date();
-      const today = now.toLocaleDateString();
-      const rec = records.find(r=>r.date===today && r.name===name && !r.checkOut);
-      if(rec){
-        rec.checkOut = now.toLocaleTimeString();
+      function checkIn() {
+        const name = document.getElementById("empName").value;
+        if (!name) {
+          alert("Nhập tên nhân viên");
+          return;
+        }
+        const now = new Date();
+        const record = {
+          date: now.toLocaleDateString(),
+          name,
+          checkIn: now.toLocaleTimeString(),
+          checkOut: "",
+        };
+        records.push(record);
         saveRecords();
-        currentStatus = "Đã ra lúc " + rec.checkOut;
+        currentStatus = "Đã vào làm lúc " + record.checkIn;
         refreshTodayState();
         renderTable();
         renderCalendar(now.getFullYear(), now.getMonth());
-      } else {
-        alert("Chưa có bản ghi vào làm hôm nay");
       }
-    }
 
-    function renderTable(){
-      const tbody = document.querySelector("#table tbody");
-      tbody.innerHTML="";
-      records.forEach(r=>{
-        const tr=document.createElement("tr");
-        tr.innerHTML=`<td>${r.date}</td><td>${r.name}</td><td>${r.checkIn}</td><td>${r.checkOut}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderCalendar(year, month){
-      const grid=document.getElementById("calendarGrid");
-      grid.innerHTML="";
-
-      const days=["CN","T2","T3","T4","T5","T6","T7"];
-      days.forEach(d=>{
-        const cell=document.createElement("div");
-        cell.innerText=d;
-        cell.classList.add("dayname");
-        grid.appendChild(cell);
-      });
-
-      const firstDay=new Date(year,month,1).getDay();
-      const daysInMonth=new Date(year,month+1,0).getDate();
-
-      for(let i=0;i<firstDay;i++){
-        grid.appendChild(document.createElement("div"));
-      }
-      for(let d=1;d<=daysInMonth;d++){
-        const cell=document.createElement("div");
-        cell.innerText=d;
-        const today=new Date();
-        if(d===today.getDate() && month===today.getMonth() && year===today.getFullYear()){
-          cell.classList.add("today");
+      function checkOut() {
+        const name = document.getElementById("empName").value;
+        if (!name) {
+          alert("Nhập tên nhân viên");
+          return;
         }
-        grid.appendChild(cell);
-      }
-    }
-
-    function sendFeedback(){
-      const text=document.getElementById("feedbackText").value;
-      if(!text){alert("Nhập nội dung"); return;}
-      document.getElementById("feedbackStatus").innerText="Đã gửi phản hồi!";
-      document.getElementById("feedbackText").value="";
-    }
-
-    function updateDateTime(){
-      const now=new Date();
-      document.getElementById("datetime").innerText = 
-        "Thời gian hiện tại: " + now.toLocaleString('vi-VN');
-    }
-
-    // Tab switching
-    document.querySelectorAll(".tab").forEach(btn=>{
-      btn.addEventListener("click",()=>{
-        document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
-        btn.classList.add("active");
-        const target=btn.getAttribute("data-target");
-        document.querySelectorAll("section").forEach(sec=>sec.classList.remove("active"));
-        document.getElementById(target).classList.add("active");
-        if(target==="timesheet"){
+        const now = new Date();
+        const today = now.toLocaleDateString();
+        const rec = records.find(
+          (r) => r.date === today && r.name === name && !r.checkOut
+        );
+        if (rec) {
+          rec.checkOut = now.toLocaleTimeString();
+          saveRecords();
+          currentStatus = "Đã ra lúc " + rec.checkOut;
+          refreshTodayState();
           renderTable();
-          const now=new Date();
           renderCalendar(now.getFullYear(), now.getMonth());
+        } else {
+          alert("Chưa có bản ghi vào làm hôm nay");
         }
-      });
-    });
+      }
 
-    // Initial
-    refreshTodayState();
-    renderTable();
-    const now=new Date();
-    renderCalendar(now.getFullYear(), now.getMonth());
-    updateDateTime();
-    setInterval(updateDateTime,1000);
-  </script>
-</main>
+      function renderTable() {
+        const tbody = document.querySelector("#table tbody");
+        tbody.innerHTML = "";
+        records.forEach((r) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${r.date}</td><td>${r.name}</td><td>${r.checkIn}</td><td>${r.checkOut}</td>`;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function renderCalendar(year, month) {
+        const grid = document.getElementById("calendarGrid");
+        grid.innerHTML = "";
+
+        const days = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+        days.forEach((d) => {
+          const cell = document.createElement("div");
+          cell.innerText = d;
+          cell.classList.add("dayname");
+          grid.appendChild(cell);
+        });
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        for (let i = 0; i < firstDay; i++) {
+          grid.appendChild(document.createElement("div"));
+        }
+        for (let d = 1; d <= daysInMonth; d++) {
+          const cell = document.createElement("div");
+          cell.innerText = d;
+          const today = new Date();
+          if (
+            d === today.getDate() &&
+            month === today.getMonth() &&
+            year === today.getFullYear()
+          ) {
+            cell.classList.add("today");
+          }
+          grid.appendChild(cell);
+        }
+      }
+
+      function sendFeedback() {
+        const text = document.getElementById("feedbackText").value;
+        if (!text) {
+          alert("Nhập nội dung");
+          return;
+        }
+        document.getElementById("feedbackStatus").innerText =
+          "Đã gửi phản hồi!";
+        document.getElementById("feedbackText").value = "";
+      }
+
+      function updateDateTime() {
+        const now = new Date();
+        document.getElementById("datetime").innerText =
+          "Thời gian hiện tại: " + now.toLocaleString("vi-VN");
+      }
+
+      // Tab switching
+      document.querySelectorAll(".tab").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".tab")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          const target = btn.getAttribute("data-target");
+          document
+            .querySelectorAll("section")
+            .forEach((sec) => sec.classList.remove("active"));
+          document.getElementById(target).classList.add("active");
+          if (target === "timesheet") {
+            renderTable();
+            const now = new Date();
+            renderCalendar(now.getFullYear(), now.getMonth());
+          }
+        });
+      });
+
+      // Initial
+      refreshTodayState();
+      renderTable();
+      const now = new Date();
+      renderCalendar(now.getFullYear(), now.getMonth());
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+    </script>
+  </main>
 </html>

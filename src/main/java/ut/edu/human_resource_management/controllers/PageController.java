@@ -59,4 +59,14 @@ public class PageController {
     public String upload() {
         return "upload"; 
     }
+
+    @GetMapping("/newspaper")
+    public String newspaper() {
+        return "newspaper"; 
+    }
+
+    @GetMapping("/index")
+    public String index() {
+        return "index"; 
+    }
 }
