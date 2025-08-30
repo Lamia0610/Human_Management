@@ -195,6 +195,26 @@ public class AuthController {
             return "redirect:/login";
         }
     }
+
+    @GetMapping("/newspaper")
+    public String showNewspaper(HttpSession session, Model model) {        
+        Long userId = (Long) session.getAttribute("userId");
+        System.out.println("Session userId = " + userId);
+
+        if (userId == null) {
+            return "redirect:/login"; 
+        }
+
+        NhanVien nhanVien = nhanVienRepository.findById(userId).orElse(null);
+        if (nhanVien != null) {
+            model.addAttribute("nhanVien", nhanVien);
+            return "newspaper"; 
+        } else {
+            return "redirect:/login";
+        }
+    }
+
+
 }
 
 
