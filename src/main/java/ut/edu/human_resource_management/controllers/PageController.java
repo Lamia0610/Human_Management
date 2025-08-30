@@ -5,24 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PageController {
 
-     @GetMapping({"/", "/home"})
-    public String home() {
-        return "home";
-    }
-
-    @GetMapping("/employees")
-    public String employees() {
-        return "employees";
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "LoginPage"; 
-    }
-
-    @GetMapping("/recruitment")
-    public String recruitment() {
-        return "recruitment"; 
+     @GetMapping({"/", "/index"})
+    public String index() {
+        return "index";
     }
 
     @GetMapping("/introduce")
@@ -30,43 +15,8 @@ public class PageController {
         return "introduce"; 
     }
 
-    @GetMapping("/information")
-    public String information() {
-        return "information"; 
-    }
-
-    @GetMapping("/attendance")
-    public String attendance() {
-        return "attendance"; 
-    }
-
-    @GetMapping("/productivity")
-    public String productivity() {
-        return "productivity"; 
-    }
-
-    @GetMapping("/training")
-    public String training() {
-        return "training"; 
-    }
-
-    @GetMapping("/document")
-    public String document() {
-        return "document"; 
-    }
-
-    @GetMapping("/upload")
-    public String upload() {
-        return "upload"; 
-    }
-
-    @GetMapping("/newspaper")
-    public String newspaper() {
-        return "newspaper"; 
-    }
-
-    @GetMapping("/index")
-    public String index() {
-        return "index"; 
+    @GetMapping("/recruitment")
+    public String recruitment() {
+        return "recruitment"; 
     }
 }

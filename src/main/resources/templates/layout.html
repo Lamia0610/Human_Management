@@ -254,7 +254,8 @@
           <span class="notification-badge">3</span>
         </div>
         <div class="auth-buttons">
-          <a th:href="@{/login}" class="btn-auth">Đăng nhập/Đăng ký</a>
+          <a th:if="${session.userId == null}" th:href="@{/login}" class="btn-auth">Đăng nhập</a>
+          <a th:if="${session.userId != null}" th:href="@{/logout}" class="btn-auth">Đăng xuất</a>
         </div>
       </div>
     </header>
@@ -263,14 +264,13 @@
       <nav class="sidebar-nav">
         <div class="sidebar-group">
           <div class="sidebar-title">Bảng điều khiển</div>
-
-          <a th:href="@{/home}" class="sidebar-link">
-            <i class="fas fa-tachometer-alt"></i>
-            <span>Tổng quan</span>
-          </a>
           <a th:href="@{/introduce}" class="sidebar-link">
             <i class="fa-solid fa-building"></i>
             <span>Giới thiệu</span>
+          </a>
+          <a th:href="@{/home}" class="sidebar-link">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Tổng quan</span>
           </a>
         </div>
         <div class="sidebar-group">

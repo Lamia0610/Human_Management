@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng Nhập & Đăng Ký</title>
+    <title>Đăng Nhập</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
@@ -441,51 +441,27 @@
           <p class="text-gray-600 mt-2">Kết nối và phát triển cùng chúng tôi</p>
         </div>
 
-        <div class="tabs">
-          <div class="tab active" data-tab="login">Đăng Nhập</div>
-          <div class="tab" data-tab="register">Đăng Ký</div>
-        </div>
-
         <!-- Login Form -->
-        <form id="loginForm" class="form active">
+        <form id="loginForm" action="/login" method="post">
           <div class="form-group">
-            <label class="form-label">Email hoặc Tên đăng nhập</label>
-            <input
-              type="text"
-              class="form-input"
-              placeholder="Nhập email hoặc tên đăng nhập"
-              required
-            />
-            <div class="error-message" id="loginEmailError">
-              Vui lòng nhập email hoặc tên đăng nhập hợp lệ
-            </div>
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" placeholder="Nhập email" required name="email" id="loginEmail" />
           </div>
 
           <div class="form-group">
             <label class="form-label">Mật khẩu</label>
             <div class="password-input">
-              <input
-                type="password"
-                class="form-input"
-                placeholder="Nhập mật khẩu"
-                required
-              />
-              <span class="password-toggle" onclick="togglePassword(this)"
-                >👁️</span
-              >
-            </div>
-            <div class="error-message" id="loginPasswordError">
-              Vui lòng nhập mật khẩu
+              <input type="password" class="form-input" placeholder="Nhập mật khẩu" required name="mat_khau" id="loginPassword" />
+              <span class="password-toggle" onclick="togglePassword(this)">👁️</span>
             </div>
           </div>
 
           <div class="form-group">
-            <a href="#" class="text-blue-600 text-sm hover:underline"
-              >Quên mật khẩu?</a
-            >
+            <a href="#" class="text-blue-600 text-sm hover:underline">Quên mật khẩu?</a>
           </div>
 
           <button type="submit" class="btn btn-primary pulse">Đăng Nhập</button>
+          <p th:text="${error}"></p>
 
           <div class="divider">
             <span class="divider-text">Hoặc tiếp tục với</span>
@@ -502,166 +478,14 @@
               <i class="fab fa-linkedin text-blue-800"></i>
             </button>
           </div>
+          
+          <p th:if="${error}" class="error-message" style="display:block; text-align: center; margin-top: 10px;" th:text="${error}"></p>
 
-          <div class="success-message" id="loginSuccess">
-            Đăng nhập thành công!
-          </div>
-        </form>
-
-        <!-- Register Form -->
-        <form id="registerForm" class="form">
-          <div class="form-group">
-            <label class="form-label">Họ và tên</label>
-            <input
-              type="text"
-              class="form-input"
-              placeholder="Nhập họ và tên đầy đủ"
-              required
-            />
-            <div class="error-message" id="registerNameError">
-              Vui lòng nhập họ tên hợp lệ
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input
-              type="email"
-              class="form-input"
-              placeholder="Nhập địa chỉ email"
-              required
-            />
-            <div class="error-message" id="registerEmailError">
-              Vui lòng nhập email hợp lệ
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Mật khẩu</label>
-            <div class="password-input">
-              <input
-                type="password"
-                class="form-input"
-                placeholder="Tạo mật khẩu mới"
-                required
-              />
-              <span class="password-toggle" onclick="togglePassword(this)"
-                >👁️</span
-              >
-            </div>
-            <div class="error-message" id="registerPasswordError">
-              Mật khẩu phải có ít nhất 6 ký tự
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Xác nhận mật khẩu</label>
-            <div class="password-input">
-              <input
-                type="password"
-                class="form-input"
-                placeholder="Xác nhận mật khẩu"
-                required
-              />
-              <span class="password-toggle" onclick="togglePassword(this)"
-                >👁️</span
-              >
-            </div>
-            <div class="error-message" id="registerConfirmError">
-              Mật khẩu xác nhận không khớp
-            </div>
-          </div>
-
-          <button type="submit" class="btn btn-primary pulse">Đăng Ký</button>
-
-          <div class="divider">
-            <span class="divider-text">Hoặc đăng ký với</span>
-          </div>
-
-          <div class="social-buttons">
-            <button type="button" class="social-btn">
-              <i class="fab fa-google text-red-600"></i>
-            </button>
-            <button type="button" class="social-btn">
-              <i class="fab fa-facebook text-blue-600"></i>
-            </button>
-            <button type="button" class="social-btn">
-              <i class="fab fa-linkedin text-blue-800"></i>
-            </button>
-          </div>
-
-          <div class="text-center mt-4">
-            <p class="text-sm text-gray-600">
-              Bằng việc đăng ký, bạn đồng ý với
-              <a href="#" class="text-blue-600 hover:underline"
-                >Điều khoản sử dụng</a
-              >
-              và
-              <a href="#" class="text-blue-600 hover:underline"
-                >Chính sách bảo mật</a
-              >
-            </p>
-          </div>
-
-          <div class="success-message" id="registerSuccess">
-            Đăng ký thành công!
-          </div>
         </form>
       </div>
     </div>
 
     <script>
-      // Carousel functionality
-      let currentSlide = 0;
-      const slides = document.querySelectorAll(".carousel-slide");
-      const indicators = document.querySelectorAll(".indicator");
-
-      function showSlide(index) {
-        slides.forEach((slide) => slide.classList.remove("active"));
-        indicators.forEach((indicator) => indicator.classList.remove("active"));
-
-        slides[index].classList.add("active");
-        indicators[index].classList.add("active");
-        currentSlide = index;
-      }
-
-      function nextSlide() {
-        let nextIndex = (currentSlide + 1) % slides.length;
-        showSlide(nextIndex);
-      }
-
-      // Auto-rotate slides every 5 seconds
-      setInterval(nextSlide, 5000);
-
-      // Manual slide control
-      indicators.forEach((indicator, index) => {
-        indicator.addEventListener("click", () => {
-          showSlide(index);
-        });
-      });
-
-      // Toggle between login and register forms
-      const tabs = document.querySelectorAll(".tab");
-      const forms = document.querySelectorAll(".form");
-
-      tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-          const tabName = tab.getAttribute("data-tab");
-
-          // Update active tab
-          tabs.forEach((t) => t.classList.remove("active"));
-          tab.classList.add("active");
-
-          // Show corresponding form
-          forms.forEach((form) => {
-            form.classList.remove("active");
-            if (form.id === tabName + "Form") {
-              form.classList.add("active");
-            }
-          });
-        });
-      });
-
       // Toggle password visibility
       function togglePassword(element) {
         const input = element.previousElementSibling;
@@ -673,121 +497,6 @@
           element.textContent = "👁️";
         }
       }
-
-      // Form validation and submission
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          const email = this.querySelector('input[type="text"]').value;
-          const password = this.querySelector('input[type="password"]').value;
-          let isValid = true;
-
-          // Email validation
-          if (!email || email.length < 3) {
-            document.getElementById("loginEmailError").style.display = "block";
-            isValid = false;
-          } else {
-            document.getElementById("loginEmailError").style.display = "none";
-          }
-
-          // Password validation
-          if (!password || password.length < 6) {
-            document.getElementById("loginPasswordError").style.display =
-              "block";
-            isValid = false;
-          } else {
-            document.getElementById("loginPasswordError").style.display =
-              "none";
-          }
-
-          if (isValid) {
-            // Simulate successful login
-            const successMessage = document.getElementById("loginSuccess");
-            successMessage.style.display = "block";
-
-            // Simulate redirect after 2 seconds
-            setTimeout(() => {
-              successMessage.textContent = "Chuyển hướng đến trang chủ...";
-            }, 1500);
-          }
-        });
-
-      document
-        .getElementById("registerForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          const name = this.querySelector('input[type="text"]').value;
-          const email = this.querySelector('input[type="email"]').value;
-          const password = this.querySelectorAll('input[type="password"]')[0]
-            .value;
-          const confirmPassword = this.querySelectorAll(
-            'input[type="password"]'
-          )[1].value;
-          let isValid = true;
-
-          // Name validation
-          if (!name || name.length < 2) {
-            document.getElementById("registerNameError").style.display =
-              "block";
-            isValid = false;
-          } else {
-            document.getElementById("registerNameError").style.display = "none";
-          }
-
-          // Email validation
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (!email || !emailRegex.test(email)) {
-            document.getElementById("registerEmailError").style.display =
-              "block";
-            isValid = false;
-          } else {
-            document.getElementById("registerEmailError").style.display =
-              "none";
-          }
-
-          // Password validation
-          if (!password || password.length < 6) {
-            document.getElementById("registerPasswordError").style.display =
-              "block";
-            isValid = false;
-          } else {
-            document.getElementById("registerPasswordError").style.display =
-              "none";
-          }
-
-          // Confirm password validation
-          if (password !== confirmPassword) {
-            document.getElementById("registerConfirmError").style.display =
-              "block";
-            isValid = false;
-          } else {
-            document.getElementById("registerConfirmError").style.display =
-              "none";
-          }
-
-          if (isValid) {
-            // Simulate successful registration
-            const successMessage = document.getElementById("registerSuccess");
-            successMessage.style.display = "block";
-
-            // Simulate redirect after 2 seconds
-            setTimeout(() => {
-              // Switch to login tab
-              tabs[0].click();
-              successMessage.style.display = "none";
-            }, 2000);
-          }
-        });
-
-      // Social buttons
-      document.querySelectorAll(".social-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          alert("Chức năng đăng nhập với mạng xã hội sẽ được kích hoạt sau");
-        });
-      });
     </script>
   </main>
 </html>
