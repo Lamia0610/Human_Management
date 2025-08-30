@@ -70,23 +70,23 @@ public class AuthController {
     }
 
 
-    @GetMapping("/attendance")
-    public String showAttendance(HttpSession session, Model model) {
-        Long userId = (Long) session.getAttribute("userId");
-        System.out.println("Session userId = " + userId);
+    // @GetMapping("/attendance")
+    // public String showAttendance(HttpSession session, Model model) {
+    //     Long userId = (Long) session.getAttribute("userId");
+    //     System.out.println("Session userId = " + userId);
 
-        if (userId == null) {
-            return "redirect:/login"; 
-        }
+    //     if (userId == null) {
+    //         return "redirect:/login"; 
+    //     }
 
-        NhanVien nhanVien = nhanVienRepository.findById(userId).orElse(null);
-        if (nhanVien != null) {
-            model.addAttribute("nhanVien", nhanVien);
-            return "attendance";
-        } else {
-            return "redirect:/login";
-        }
-    }
+    //     NhanVien nhanVien = nhanVienRepository.findById(userId).orElse(null);
+    //     if (nhanVien != null) {
+    //         model.addAttribute("nhanVien", nhanVien);
+    //         return "attendance";
+    //     } else {
+    //         return "redirect:/login";
+    //     }
+    // }
 
     @GetMapping("/document")
     public String showDocument(HttpSession session, Model model) {

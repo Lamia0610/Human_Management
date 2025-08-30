@@ -1,6 +1,7 @@
 package ut.edu.human_resource_management.models;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "nhan_vien")
@@ -37,11 +38,12 @@ public class NhanVien {
     @Column(name = "mat_khau")
     private String matKhau;
 
-    // Hàm khởi tạo mặc định (default constructor) - Cần thiết cho JPA
+    @OneToMany(mappedBy = "nhanVien", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChamCong> chamCongList;
+
     public NhanVien() {
     }
 
-    // Hàm khởi tạo có tham số (tùy chọn, để dễ dàng tạo đối tượng)
     public NhanVien(String maNhanVien, String hoTen, String gioiTinh, String ngaySinh, String email, String soDienThoai, String chucDanh, String phongBan, String matKhau) {
         this.maNhanVien = maNhanVien;
         this.hoTen = hoTen;
@@ -133,5 +135,13 @@ public class NhanVien {
 
     public void setMatKhau(String matKhau) {
         this.matKhau = matKhau;
+    }
+
+    public List<ChamCong> getChamCongList() {
+        return chamCongList;
+    }
+
+    public void setChamCongList(List<ChamCong> chamCongList) {
+        this.chamCongList = chamCongList;
     }
 }
