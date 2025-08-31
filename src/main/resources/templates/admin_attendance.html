@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html
+  lang="vi"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Chấm Công</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .table-row-hover:hover {
+        background: rgba(99, 102, 241, 0.05);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+      }
+
+      .status-badge {
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .search-input:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      }
+
+      .calendar-input {
+        cursor: pointer;
+      }
+
+      .time-cell {
+        font-family: "Courier New", monospace;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <main layout:fragment="content">
+    <div class="min-h-screen flex items-center justify-center">
+      <div class="glass-effect w-full max-w-7xl mx-auto p-8 shadow-2xl">
+        <!-- Header Section -->
+        <div
+          class="flex flex-col md:flex-row justify-between items-center mb-8"
+        >
+          <div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">
+              Quản Lý Chấm Công
+            </h1>
+            <p class="text-gray-600">
+              Theo dõi và quản lý lịch sử chấm công nhân viên
+            </p>
+          </div>
+
+          <div
+            class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 mt-4 md:mt-0"
+          >
+            <div class="flex items-center space-x-2">
+              <div class="relative">
+                <input
+                  type="date"
+                  class="calendar-input border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  id="startDate"
+                  value="2023-12-01"
+                />
+              </div>
+              <span class="text-gray-600">đến</span>
+              <div class="relative">
+                <input
+                  type="date"
+                  class="calendar-input border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  id="endDate"
+                  value="2023-12-31"
+                />
+              </div>
+            </div>
+
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Tìm kiếm nhân viên..."
+                class="search-input pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                id="searchInput"
+              />
+              <i
+                class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              ></i>
+            </div>
+
+            <select
+              class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              id="statusFilter"
+            >
+              <option value="all">Tất cả trạng thái</option>
+              <option value="on-time">Đúng giờ</option>
+              <option value="late">Đi muộn</option>
+              <option value="early">Về sớm</option>
+              <option value="absent">Vắng mặt</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div
+            class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100"
+          >
+            <div class="flex items-center">
+              <div class="bg-blue-100 p-3 rounded-lg">
+                <i class="fas fa-users text-blue-600 text-xl"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-2xl font-bold text-gray-800">45</h3>
+                <p class="text-gray-600">Tổng nhân viên</p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-100"
+          >
+            <div class="flex items-center">
+              <div class="bg-green-100 p-3 rounded-lg">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-2xl font-bold text-gray-800">38</h3>
+                <p class="text-gray-600">Có mặt hôm nay</p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-xl border border-orange-100"
+          >
+            <div class="flex items-center">
+              <div class="bg-orange-100 p-3 rounded-lg">
+                <i class="fas fa-clock text-orange-600 text-xl"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-2xl font-bold text-gray-800">5</h3>
+                <p class="text-gray-600">Đi muộn</p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-gradient-to-r from-red-50 to-rose-50 p-6 rounded-xl border border-red-100"
+          >
+            <div class="flex items-center">
+              <div class="bg-red-100 p-3 rounded-lg">
+                <i class="fas fa-times-circle text-red-600 text-xl"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-2xl font-bold text-gray-800">2</h3>
+                <p class="text-gray-600">Vắng mặt</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="overflow-x-auto rounded-xl">
+          <table class="w-full table-auto">
+            <thead>
+              <tr class="bg-gray-50 text-gray-700">
+                <th class="px-6 py-4 text-left font-semibold">STT</th>
+                <th class="px-6 py-4 text-left font-semibold">Nhân viên</th>
+                <th class="px-6 py-4 text-left font-semibold">Ngày</th>
+                <th class="px-6 py-4 text-left font-semibold">Giờ vào</th>
+                <th class="px-6 py-4 text-left font-semibold">Giờ ra</th>
+                <th class="px-6 py-4 text-left font-semibold">Tổng giờ</th>
+                <th class="px-6 py-4 text-left font-semibold">Trạng thái</th>
+                <th class="px-6 py-4 text-left font-semibold">Ghi chú</th>
+                <th class="px-6 py-4 text-left font-semibold">Hành động</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200" id="attendanceTable">
+              <!-- Data will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-between items-center mt-6">
+          <div class="text-gray-600">
+            Hiển thị <span id="currentItems">1-10</span> của
+            <span id="totalItems">45</span> bản ghi
+          </div>
+          <div class="flex space-x-2">
+            <button
+              class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="px-3 py-2 bg-indigo-600 text-white rounded-lg">
+              1
+            </button>
+            <button
+              class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              2
+            </button>
+            <button
+              class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              3
+            </button>
+            <button
+              class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              4
+            </button>
+            <button
+              class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Export Button -->
+        <div class="mt-6 flex justify-end">
+          <button
+            class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            <i class="fas fa-download mr-2"></i>Xuất Excel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Sample data for attendance management
+      const attendanceData = [
+        {
+          id: 1,
+          employeeId: "NV001",
+          name: "Nguyễn Văn An",
+          avatar:
+            "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cad2720f-6869-4753-921b-c49b67f9b662.png",
+          date: "15/12/2023",
+          checkIn: "08:15",
+          checkOut: "17:30",
+          totalHours: "8.25",
+          status: "on-time",
+          note: "",
+        },
+        {
+          id: 2,
+          employeeId: "NV002",
+          name: "Trần Thị Bích",
+          avatar: "https://placehold.co/40x40",
+          date: "15/12/2023",
+          checkIn: "07:45",
+          checkOut: "16:50",
+          totalHours: "8.08",
+          status: "early",
+          note: "Về sớm 10 phút",
+        },
+        {
+          id: 3,
+          employeeId: "NV003",
+          name: "Lê Minh Cường",
+          avatar: "https://placehold.co/40x40",
+          date: "15/12/2023",
+          checkIn: "09:30",
+          checkOut: "18:00",
+          totalHours: "7.50",
+          status: "late",
+          note: "Đi muộn 30 phút",
+        },
+        {
+          id: 4,
+          employeeId: "NV004",
+          name: "Phạm Thu Hà",
+          avatar: "https://placehold.co/40x40",
+          date: "15/12/2023",
+          checkIn: "08:00",
+          checkOut: "17:45",
+          totalHours: "8.75",
+          status: "on-time",
+          note: "Tăng ca 45 phút",
+        },
+        {
+          id: 5,
+          employeeId: "NV005",
+          name: "Hoàng Văn Đức",
+          avatar: "https://placehold.co/40x40",
+          date: "15/12/2023",
+          checkIn: "",
+          checkOut: "",
+          totalHours: "0.00",
+          status: "absent",
+          note: "Nghỉ phép năm",
+        },
+        {
+          id: 6,
+          employeeId: "NV006",
+          name: "Đỗ Thị Mai",
+          avatar: "https://placehold.co/40x40",
+          date: "15/12/2023",
+          checkIn: "08:05",
+          checkOut: "17:20",
+          totalHours: "8.25",
+          status: "on-time",
+          note: "",
+        },
+        {
+          id: 7,
+          employeeId: "NV007",
+          name: "Vũ Quang Huy",
+          avatar: "https://placehold.co/40x40",
+          date: "15/12/2023",
+          checkIn: "08:45",
+          checkOut: "18:30",
+          totalHours: "8.75",
+          status: "late",
+          note: "Đi muộn 45 phút",
+        },
+        {
+          id: 8,
+          employeeId: "NV008",
+          name: "Ngô Thanh Tùng",
+          avatar: "https://placehold.co/40x40",
+          date: "15/12/2023",
+          checkIn: "07:30",
+          checkOut: "16:00",
+          totalHours: "7.50",
+          status: "early",
+          note: "Về sớm 1 tiếng",
+        },
+        {
+          id: 9,
+          employeeId: "NV009",
+          name: "Bùi Thị Lan",
+          avatar: "https://placehold.co/40x40",
+          date: "15/12/2023",
+          checkIn: "08:00",
+          checkOut: "17:00",
+          totalHours: "8.00",
+          status: "on-time",
+          note: "",
+        },
+        {
+          id: 10,
+          employeeId: "NV010",
+          name: "Đinh Văn Nam",
+          avatar: "https://placehold.co/40x40",
+          date: "15/12/2023",
+          checkIn: "",
+          checkOut: "",
+          totalHours: "0.00",
+          status: "absent",
+          note: "Nghỉ ốm",
+        },
+      ];
+
+      // Function to render table rows
+      function renderTable(data) {
+        const tableBody = document.getElementById("attendanceTable");
+        tableBody.innerHTML = "";
+
+        data.forEach((record, index) => {
+          const row = document.createElement("tr");
+          row.className = "table-row-hover";
+
+          // Determine status badge class and text
+          let statusClass = "";
+          let statusIcon = "";
+          let statusText = "";
+
+          switch (record.status) {
+            case "on-time":
+              statusClass = "bg-green-100 text-green-800";
+              statusIcon = "fa-check-circle";
+              statusText = "Đúng giờ";
+              break;
+            case "late":
+              statusClass = "bg-yellow-100 text-yellow-800";
+              statusIcon = "fa-clock";
+              statusText = "Đi muộn";
+              break;
+            case "early":
+              statusClass = "bg-orange-100 text-orange-800";
+              statusIcon = "fa-arrow-left";
+              statusText = "Về sớm";
+              break;
+            case "absent":
+              statusClass = "bg-red-100 text-red-800";
+              statusIcon = "fa-times-circle";
+              statusText = "Vắng mặt";
+              break;
+          }
+
+          row.innerHTML = `
+                    <td class="px-6 py-4 font-medium text-gray-900">${
+                      index + 1
+                    }</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center">
+                            <img src="${record.avatar}" alt="Portrait of ${
+            record.name
+          } - professional employee headshot" class="w-10 h-10 rounded-full mr-3" onerror="this.src='https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a38d593e-2c02-40e4-884a-b7864ac0868d.png'">
+                            <div>
+                                <div class="font-medium text-gray-900">${
+                                  record.name
+                                }</div>
+                                <div class="text-sm text-gray-500">${
+                                  record.employeeId
+                                }</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-gray-700 font-medium">${
+                      record.date
+                    }</td>
+                    <td class="px-6 py-4 time-cell ${
+                      record.checkIn ? "text-blue-600" : "text-gray-400"
+                    }">${record.checkIn || "--:--"}</td>
+                    <td class="px-6 py-4 time-cell ${
+                      record.checkOut ? "text-blue-600" : "text-gray-400"
+                    }">${record.checkOut || "--:--"}</td>
+                    <td class="px-6 py-4 font-bold text-gray-800">${
+                      record.totalHours
+                    }h</td>
+                    <td class="px-6 py-4">
+                        <span class="status-badge ${statusClass}">
+                            <i class="fas ${statusIcon} mr-1"></i>${statusText}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-600 max-w-xs">
+                        <div class="truncate" title="${record.note}">${
+            record.note || "Không có ghi chú"
+          }</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2">
+                            <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="Xem chi tiết" onclick="viewDetails(${
+                              record.id
+                            })">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg" title="Chỉnh sửa" onclick="editRecord(${
+                              record.id
+                            })">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="p-2 text-green-600 hover:bg-green-50 rounded-lg" title="In báo cáo" onclick="printReport(${
+                              record.id
+                            })">
+                                <i class="fas fa-print"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+          tableBody.appendChild(row);
+        });
+      }
+
+      // View details function
+      function viewDetails(id) {
+        const record = attendanceData.find((r) => r.id === id);
+        alert(
+          `Chi tiết chấm công:\n\nNhân viên: ${record.name}\nNgày: ${
+            record.date
+          }\nGiờ vào: ${record.checkIn || "Chưa chấm công"}\nGiờ ra: ${
+            record.checkOut || "Chưa chấm công"
+          }\nTrạng thái: ${getStatusText(record.status)}\nGhi chú: ${
+            record.note || "Không có"
+          }`
+        );
+      }
+
+      // Edit record function
+      function editRecord(id) {
+        const record = attendanceData.find((r) => r.id === id);
+        alert(`Chỉnh sửa chấm công cho: ${record.name} - ${record.date}`);
+      }
+
+      // Print report function
+      function printReport(id) {
+        const record = attendanceData.find((r) => r.id === id);
+        alert(`In báo cáo chấm công cho: ${record.name}`);
+      }
+
+      // Get status text
+      function getStatusText(status) {
+        switch (status) {
+          case "on-time":
+            return "Đúng giờ";
+          case "late":
+            return "Đi muộn";
+          case "early":
+            return "Về sớm";
+          case "absent":
+            return "Vắng mặt";
+          default:
+            return "Không xác định";
+        }
+      }
+
+      // Search functionality
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", function (e) {
+          const searchTerm = e.target.value.toLowerCase();
+          const filteredData = attendanceData.filter(
+            (record) =>
+              record.name.toLowerCase().includes(searchTerm) ||
+              record.employeeId.toLowerCase().includes(searchTerm)
+          );
+          renderTable(filteredData);
+        });
+
+      // Filter by status
+      document
+        .getElementById("statusFilter")
+        .addEventListener("change", function (e) {
+          const status = e.target.value;
+          if (status === "all") {
+            renderTable(attendanceData);
+          } else {
+            const filteredData = attendanceData.filter(
+              (record) => record.status === status
+            );
+            renderTable(filteredData);
+          }
+        });
+
+      // Date filter functionality (placeholder)
+      document
+        .getElementById("startDate")
+        .addEventListener("change", filterByDate);
+      document
+        .getElementById("endDate")
+        .addEventListener("change", filterByDate);
+
+      function filterByDate() {
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+        alert(`Lọc từ ${startDate} đến ${endDate}`);
+        // In a real application, you would filter the data based on dates
+        renderTable(attendanceData);
+      }
+
+      // Initial render
+      renderTable(attendanceData);
+    </script>
+  </main>
+</html>

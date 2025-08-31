@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html
+  lang="vi"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Nhân Viên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .employee-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .employee-table th,
+      .employee-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .employee-table th {
+        background-color: #f9fafb;
+        font-weight: 600;
+      }
+      .employee-table tr:hover {
+        background-color: #f8fafc;
+      }
+      .modal {
+        transition: opacity 0.3s ease;
+      }
+      .pagination-btn {
+        transition: all 0.2s ease;
+      }
+      .pagination-btn:hover:not(.disabled) {
+        background-color: #3b82f6;
+        color: white;
+      }
+    </style>
+  </head>
+  <main layout:fragment="content" class="bg-gray-50 min-h-screen p-6">
+    <!-- Main Content Container -->
+    <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-6">
+      <!-- Page Header -->
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">
+          <i class="fas fa-users mr-2 text-blue-600"></i>
+          Quản Lý Nhân Viên
+        </h1>
+        <button
+          onclick="openAddModal()"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center transition duration-200"
+        >
+          <i class="fas fa-plus mr-2"></i>
+          Thêm Nhân Viên
+        </button>
+      </div>
+
+      <!-- Search and Filter Section -->
+      <div class="bg-gray-50 p-4 rounded-lg mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="md:col-span-2">
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Tìm kiếm nhân viên..."
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+          </div>
+          <select
+            class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">Tất cả phòng ban</option>
+            <option value="it">IT</option>
+            <option value="hr">Nhân sự</option>
+            <option value="sales">Kinh doanh</option>
+            <option value="marketing">Marketing</option>
+          </select>
+          <select
+            class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">Tất cả trạng thái</option>
+            <option value="active">Đang làm việc</option>
+            <option value="inactive">Nghỉ việc</option>
+            <option value="vacation">Nghỉ phép</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Statistics Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-sm text-blue-600 font-medium">Tổng nhân viên</p>
+              <p class="text-2xl font-bold text-gray-800">42</p>
+            </div>
+            <i class="fas fa-users text-blue-400 text-2xl"></i>
+          </div>
+        </div>
+        <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-sm text-green-600 font-medium">Đang làm việc</p>
+              <p class="text-2xl font-bold text-gray-800">38</p>
+            </div>
+            <i class="fas fa-user-check text-green-400 text-2xl"></i>
+          </div>
+        </div>
+        <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-500">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-sm text-yellow-600 font-medium">Nghỉ phép</p>
+              <p class="text-2xl font-bold text-gray-800">3</p>
+            </div>
+            <i class="fas fa-umbrella-beach text-yellow-400 text-2xl"></i>
+          </div>
+        </div>
+        <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-sm text-red-600 font-medium">Nghỉ việc</p>
+              <p class="text-2xl font-bold text-gray-800">1</p>
+            </div>
+            <i class="fas fa-user-times text-red-400 text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Employees Table -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="employee-table">
+            <thead>
+              <tr>
+                <th class="w-12"></th>
+                <th>Nhân viên</th>
+                <th>Chức vụ</th>
+                <th>Phòng ban</th>
+                <th>Email</th>
+                <th>Điện thoại</th>
+                <th>Trạng thái</th>
+                <th class="text-center">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Employee 1 -->
+              <tr>
+                <td>
+                  <img
+                    src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cd0eb723-3065-4516-b968-47ed8a0c3600.png"
+                    alt="Portrait of a professional Asian business woman in her 30s with dark hair and formal attire"
+                    class="w-10 h-10 rounded-full object-cover"
+                  />
+                </td>
+                <td>
+                  <div class="flex items-center">
+                    <div>
+                      <p class="font-medium text-gray-900">Nguyễn Thị Mai</p>
+                      <p class="text-sm text-gray-500">NV001</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Trưởng phòng</td>
+                <td>Nhân sự</td>
+                <td>mai.nguyen@company.com</td>
+                <td>0912 345 678</td>
+                <td>
+                  <span
+                    class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full"
+                    >Đang làm</span
+                  >
+                </td>
+                <td>
+                  <div class="flex justify-center space-x-2">
+                    <button
+                      onclick="viewEmployee(1)"
+                      class="text-blue-600 hover:text-blue-800 transition duration-200"
+                    >
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button
+                      onclick="editEmployee(1)"
+                      class="text-yellow-600 hover:text-yellow-800 transition duration-200"
+                    >
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button
+                      onclick="deleteEmployee(1)"
+                      class="text-red-600 hover:text-red-800 transition duration-200"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Employee 2 -->
+              <tr>
+                <td>
+                  <img
+                    src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8698eef4-cba0-4157-873b-75888aab5f38.png"
+                    alt="Portrait of a professional Vietnamese man in his late 20s with glasses and business casual attire"
+                    class="w-10 h-10 rounded-full object-cover"
+                  />
+                </td>
+                <td>
+                  <div class="flex items-center">
+                    <div>
+                      <p class="font-medium text-gray-900">Trần Văn Nam</p>
+                      <p class="text-sm text-gray-500">NV002</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Lập trình viên</td>
+                <td>IT</td>
+                <td>nam.tran@company.com</td>
+                <td>0987 654 321</td>
+                <td>
+                  <span
+                    class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full"
+                    >Đang làm</span
+                  >
+                </td>
+                <td>
+                  <div class="flex justify-center space-x-2">
+                    <button
+                      onclick="viewEmployee(2)"
+                      class="text-blue-600 hover:text-blue-800 transition duration-200"
+                    >
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button
+                      onclick="editEmployee(2)"
+                      class="text-yellow-600 hover:text-yellow-800 transition duration-200"
+                    >
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button
+                      onclick="deleteEmployee(2)"
+                      class="text-red-600 hover:text-red-800 transition duration-200"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Employee 3 -->
+              <tr>
+                <td>
+                  <img
+                    src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/64e0c412-c942-4918-b06f-bc1b5bcb59f0.png"
+                    alt="Portrait of a young Vietnamese woman with bright smile, wearing professional office attire"
+                    class="w-10 h-10 rounded-full object-cover"
+                  />
+                </td>
+                <td>
+                  <div class="flex items-center">
+                    <div>
+                      <p class="font-medium text-gray-900">Lê Thị Hương</p>
+                      <p class="text-sm text-gray-500">NV003</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Chuyên viên</td>
+                <td>Marketing</td>
+                <td>huong.le@company.com</td>
+                <td>0903 456 789</td>
+                <td>
+                  <span
+                    class="px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded-full"
+                    >Nghỉ phép</span
+                  >
+                </td>
+                <td>
+                  <div class="flex justify-center space-x-2">
+                    <button
+                      onclick="viewEmployee(3)"
+                      class="text-blue-600 hover:text-blue-800 transition duration-200"
+                    >
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button
+                      onclick="editEmployee(3)"
+                      class="text-yellow-600 hover:text-yellow-800 transition duration-200"
+                    >
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button
+                      onclick="deleteEmployee(3)"
+                      class="text-red-600 hover:text-red-800 transition duration-200"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Employee 4 -->
+              <tr>
+                <td>
+                  <img
+                    src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9ce2c38a-415d-44f2-bd74-dfa3ed116e1c.png"
+                    alt="Portrait of a mature Vietnamese businessman in suit and tie with confident expression"
+                    class="w-10 h-10 rounded-full object-cover"
+                  />
+                </td>
+                <td>
+                  <div class="flex items-center">
+                    <div>
+                      <p class="font-medium text-gray-900">Phạm Quốc Bảo</p>
+                      <p class="text-sm text-gray-500">NV004</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Giám đốc</td>
+                <td>Điều hành</td>
+                <td>bao.pham@company.com</td>
+                <td>0918 765 432</td>
+                <td>
+                  <span
+                    class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full"
+                    >Đang làm</span
+                  >
+                </td>
+                <td>
+                  <div class="flex justify-center space-x-2">
+                    <button
+                      onclick="viewEmployee(4)"
+                      class="text-blue-600 hover:text-blue-800 transition duration-200"
+                    >
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button
+                      onclick="editEmployee(4)"
+                      class="text-yellow-600 hover:text-yellow-800 transition duration-200"
+                    >
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button
+                      onclick="deleteEmployee(4)"
+                      class="text-red-600 hover:text-red-800 transition duration-200"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-between items-center mt-6">
+        <div class="text-sm text-gray-600">Hiển thị 1-4 của 42 nhân viên</div>
+        <div class="flex space-x-2">
+          <button
+            class="pagination-btn px-3 py-1 border border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled
+          >
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button
+            class="pagination-btn px-3 py-1 bg-blue-600 text-white border border-blue-600 rounded"
+          >
+            1
+          </button>
+          <button
+            class="pagination-btn px-3 py-1 border border-gray-300 rounded hover:bg-gray-100"
+          >
+            2
+          </button>
+          <button
+            class="pagination-btn px-3 py-1 border border-gray-300 rounded hover:bg-gray-100"
+          >
+            3
+          </button>
+          <button
+            class="pagination-btn px-3 py-1 border border-gray-300 rounded hover:bg-gray-100"
+          >
+            ...
+          </button>
+          <button
+            class="pagination-btn px-3 py-1 border border-gray-300 rounded hover:bg-gray-100"
+          >
+            10
+          </button>
+          <button
+            class="pagination-btn px-3 py-1 border border-gray-300 rounded hover:bg-gray-100"
+          >
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add/Edit Employee Modal -->
+    <div
+      id="employeeModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 modal opacity-0 pointer-events-none"
+    >
+      <div
+        class="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-90vh overflow-y-auto"
+      >
+        <div class="flex justify-between items-center p-6 border-b">
+          <h3 class="text-xl font-semibold text-gray-800" id="modalTitle">
+            Thêm Nhân Viên Mới
+          </h3>
+          <button
+            onclick="closeModal()"
+            class="text-gray-400 hover:text-gray-600"
+          >
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+        <div class="p-6">
+          <form id="employeeForm" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Họ và tên *</label
+                >
+                <input
+                  type="text"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Mã nhân viên *</label
+                >
+                <input
+                  type="text"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Email *</label
+                >
+                <input
+                  type="email"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Số điện thoại *</label
+                >
+                <input
+                  type="tel"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Chức vụ *</label
+                >
+                <select
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Chọn chức vụ</option>
+                  <option value="director">Giám đốc</option>
+                  <option value="manager">Trưởng phòng</option>
+                  <option value="specialist">Chuyên viên</option>
+                  <option value="staff">Nhân viên</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Phòng ban *</label
+                >
+                <select
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Chọn phòng ban</option>
+                  <option value="it">IT</option>
+                  <option value="hr">Nhân sự</option>
+                  <option value="sales">Kinh doanh</option>
+                  <option value="marketing">Marketing</option>
+                  <option value="finance">Tài chính</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Ngày vào làm *</label
+                >
+                <input
+                  type="date"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Trạng thái *</label
+                >
+                <select
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="active">Đang làm việc</option>
+                  <option value="vacation">Nghỉ phép</option>
+                  <option value="inactive">Nghỉ việc</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Địa chỉ</label
+              >
+              <textarea
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows="2"
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Ảnh đại diện</label
+              >
+              <input
+                type="file"
+                accept="image/*"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="flex justify-end space-x-3 p-6 border-t">
+          <button
+            onclick="closeModal()"
+            class="px-4 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg transition duration-200"
+          >
+            Hủy
+          </button>
+          <button
+            onclick="saveEmployee()"
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200"
+          >
+            Lưu
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Modal functions
+      function openAddModal() {
+        document.getElementById("modalTitle").textContent =
+          "Thêm Nhân Viên Mới";
+        document
+          .getElementById("employeeModal")
+          .classList.remove("opacity-0", "pointer-events-none");
+        document
+          .getElementById("employeeModal")
+          .classList.add("opacity-100", "pointer-events-auto");
+      }
+
+      function closeModal() {
+        document
+          .getElementById("employeeModal")
+          .classList.remove("opacity-100", "pointer-events-auto");
+        document
+          .getElementById("employeeModal")
+          .classList.add("opacity-0", "pointer-events-none");
+      }
+
+      function editEmployee(id) {
+        document.getElementById("modalTitle").textContent =
+          "Chỉnh Sửa Nhân Viên";
+        // Here you would typically load employee data based on ID
+        openAddModal();
+      }
+
+      function viewEmployee(id) {
+        alert("Xem chi tiết nhân viên ID: " + id);
+        // Implement view functionality
+      }
+
+      function deleteEmployee(id) {
+        if (confirm("Bạn có chắc chắn muốn xóa nhân viên này?")) {
+          alert("Đã xóa nhân viên ID: " + id);
+          // Implement delete functionality
+        }
+      }
+
+      function saveEmployee() {
+        const form = document.getElementById("employeeForm");
+        if (form.checkValidity()) {
+          alert("Đã lưu thông tin nhân viên");
+          closeModal();
+          // Implement save functionality
+        } else {
+          form.reportValidity();
+        }
+      }
+
+      // Close modal when clicking outside
+      document
+        .getElementById("employeeModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) {
+            closeModal();
+          }
+        });
+
+      // Search functionality
+      const searchInput = document.querySelector('input[type="text"]');
+      searchInput.addEventListener("input", function (e) {
+        const searchTerm = e.target.value.toLowerCase();
+        // Implement search filtering
+        console.log("Searching for:", searchTerm);
+      });
+
+      // Filter functionality
+      const filterSelects = document.querySelectorAll("select");
+      filterSelects.forEach((select) => {
+        select.addEventListener("change", function () {
+          // Implement filter functionality
+          console.log("Filter changed:", this.value);
+        });
+      });
+    </script>
+  </main>
+</html>
