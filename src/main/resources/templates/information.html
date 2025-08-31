@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="vi"
   xmlns:th="http://www.thymeleaf.org"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -83,110 +83,166 @@
 
   <div class="content">
     <h2>Gửi phản hồi</h2>
-    <form id="feedbackForm">
+    <form th:action="@{/feedback/add}" th:object="${information}" method="post">
+
+  <label for="name">Họ tên</label>
+  <input type="text" id="name" th:field="*{name}" readonly />
+
+  <label for="topic">Vấn đề hỗ trợ</label>
+  <select id="topic" th:field="*{topic}" required>
+    <option value="">-- Chọn vấn đề --</option>
+    <option value="Lương">💰 Lương</option>
+    <option value="Nghỉ phép">📅 Nghỉ phép</option>
+    <option value="Thiết bị">💻 Thiết bị</option>
+    <option value="Khác">📝 Khác</option>
+  </select>
+
+  <label for="message">Nội dung phản hồi</label>
+  <textarea id="message" th:field="*{message}" rows="4"
+            placeholder="Nhập phản hồi chi tiết..." required></textarea>
+
+  <button type="submit">🚀 Gửi phản hồi</button>
+</form>
+
+
+    <div class="feedback-list">
+      <h2>📋 Danh sách phản hồi</h2>
+      
+    
+      <!-- <div th:each="fb : ${listInfo}" class="feedback-item">
+        <p><strong th:text="${fb.name}"></strong> 
+           <span class="topic" th:text="'(' + ${fb.topic} + ')'"></span></p>
+        <p th:text="${fb.message}"></p>
+        <p>Trạng thái: <span class="status" th:text="${fb.status}"></span></p>
+        <p><small th:text="${#temporals.format(fb.createdAt, 'dd/MM/yyyy HH:mm')}"></small></p>
+      </div>
+    </div>
+  </div>
+</main>
+</html> --> 
+
+
+
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tiếp nhận phản hồi</title>
+  <style>
+    #feedbackPage {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f9ff;
+      color: #333;
+    }
+    #feedbackPage header {
+      background: #1e88e5;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+    }
+    #feedbackPage .content {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    #feedbackPage h2 {
+      color: #1e88e5;
+    }
+    #feedbackPage label {
+      display: block;
+      margin: 8px 0 5px;
+    }
+    #feedbackPage textarea,
+    #feedbackPage input,
+    #feedbackPage select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    #feedbackPage button {
+      background: #1e88e5;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #feedbackPage button:hover {
+      background: #1565c0;
+    }
+    #feedbackPage .feedback-list {
+      margin-top: 25px;
+    }
+    #feedbackPage .feedback-item {
+      border: 1px solid #ccc;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      background: #f9f9f9;
+    }
+    #feedbackPage .status {
+      font-weight: bold;
+      color: #1565c0;
+    }
+    #feedbackPage .topic {
+      font-style: italic;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+<main layout:fragment="content" id="feedbackPage">
+  <header>
+    <h1>📩 Tiếp nhận phản hồi nhân viên</h1>
+  </header>
+
+  <div class="content">
+    <h2>Gửi phản hồi</h2>
+    <form th:action="@{/information/add}" th:object="${information}" method="post">
+
       <label for="name">Họ tên</label>
-      <input type="text" id="name" name="name"
-             th:value="${nhanVien.hoTen}" readonly />
+      <input type="text" id="name" th:field="*{name}" readonly />
 
       <label for="topic">Vấn đề hỗ trợ</label>
-      <select id="topic" required>
+      <select id="topic" th:field="*{topic}" required>
         <option value="">-- Chọn vấn đề --</option>
         <option value="Lương">💰 Lương</option>
         <option value="Nghỉ phép">📅 Nghỉ phép</option>
+        <option value="Thiết bị">📅 Chấm công</option>
         <option value="Thiết bị">💻 Thiết bị</option>
         <option value="Khác">📝 Khác</option>
       </select>
 
       <label for="message">Nội dung phản hồi</label>
-      <textarea id="message" rows="4" placeholder="Nhập phản hồi chi tiết..." required></textarea>
+      <textarea id="message" th:field="*{message}" rows="4"
+                placeholder="Nhập phản hồi chi tiết..." required></textarea>
 
       <button type="submit">🚀 Gửi phản hồi</button>
     </form>
 
     <div class="feedback-list">
       <h2>📋 Danh sách phản hồi</h2>
-      <div id="feedbackContainer"></div>
+      <div th:each="fb : ${listInfo}" class="feedback-item">
+        <p>
+          <strong th:text="${fb.name}"></strong>
+          <span class="topic" th:text="|(${fb.topic})|"></span>
+        </p>
+        <p th:text="${fb.message}"></p>
+        <p>Trạng thái: <span class="status" th:text="${fb.status}"></span></p>
+        <p><small th:text="${#temporals.format(fb.createdAt, 'dd/MM/yyyy HH:mm')}"></small></p>
+      </div>
     </div>
   </div>
-
-  <script>
-    const form = document.getElementById("feedbackForm");
-    const feedbackContainer = document.getElementById("feedbackContainer");
-    const nameInput = document.getElementById("name");
-
-    // Tải phản hồi từ localStorage khi trang được tải
-    document.addEventListener("DOMContentLoaded", () => {
-        const storedFeedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
-        storedFeedbacks.forEach(feedback => addFeedbackToDOM(feedback));
-    });
-
-    // Xử lý sự kiện gửi form
-    form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const name = nameInput.value.trim();
-        const topic = document.getElementById("topic").value.trim();
-        const message = document.getElementById("message").value.trim();
-
-        if (name && topic && message) {
-            const newFeedback = {
-                name: name,
-                topic: topic,
-                message: message,
-                status: "Đang chờ duyệt",
-                timestamp: new Date().toISOString()
-            };
-
-            // Thêm vào DOM
-            addFeedbackToDOM(newFeedback);
-
-            // Lưu vào localStorage
-            const storedFeedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
-            storedFeedbacks.unshift(newFeedback); // Thêm vào đầu mảng
-            localStorage.setItem('feedbacks', JSON.stringify(storedFeedbacks));
-
-            form.reset();
-            nameInput.value = name; // giữ lại tên nhân viên
-        }
-    });
-
-    // Hàm thêm một phản hồi vào DOM
-    function addFeedbackToDOM(feedback) {
-        const div = document.createElement("div");
-        div.classList.add("feedback-item");
-
-        div.innerHTML = `
-            <p><strong>${feedback.name}</strong> <span class="topic">(${feedback.topic})</span></p>
-            <p>${feedback.message}</p>
-            <p>Trạng thái: <span class="status">${feedback.status}</span></p>
-            <label>Đổi trạng thái:
-                <select>
-                    <option value="Đang chờ duyệt" ${feedback.status === "Đang chờ duyệt" ? "selected" : ""}>Đang chờ duyệt</option>
-                    <option value="Đã duyệt" ${feedback.status === "Đã duyệt" ? "selected" : ""}>Đã duyệt</option>
-                    <option value="Đã xử lý" ${feedback.status === "Đã xử lý" ? "selected" : ""}>Đã xử lý</option>
-                </select>
-            </label>
-        `;
-        feedbackContainer.prepend(div);
-        
-        // Gán sự kiện cho select mới tạo
-        const selectEl = div.querySelector('select');
-        selectEl.addEventListener('change', (e) => updateStatus(e.target, feedback.timestamp));
-    }
-    
-    // Cập nhật trạng thái
-    function updateStatus(selectEl, timestamp) {
-        const newStatus = selectEl.value;
-        const statusSpan = selectEl.closest(".feedback-item").querySelector(".status");
-        statusSpan.textContent = newStatus;
-
-        // Cập nhật trong localStorage
-        const storedFeedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
-        const feedbackToUpdate = storedFeedbacks.find(fb => fb.timestamp === timestamp);
-        if (feedbackToUpdate) {
-            feedbackToUpdate.status = newStatus;
-            localStorage.setItem('feedbacks', JSON.stringify(storedFeedbacks));
-        }
-    }
-</script>
 </main>
+</body>
 </html>
