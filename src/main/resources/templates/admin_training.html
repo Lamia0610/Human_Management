@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html
+  lang="vi"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Đào tạo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      main {
+        font-family: "Inter", "Segoe UI", sans-serif;
+        background-color: #f8fafc;
+      }
+      .table-row:hover {
+        background-color: #f1f5f9;
+        transition: background-color 0.2s ease;
+      }
+      .status-approved {
+        background-color: #10b981;
+        color: white;
+      }
+      .status-pending {
+        background-color: #f59e0b;
+        color: white;
+      }
+      .status-rejected {
+        background-color: #ef4444;
+        color: white;
+      }
+      .status-completed {
+        background-color: #3b82f6;
+        color: white;
+      }
+      .search-input:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+    </style>
+  </head>
+  <main layout:fragment="content" class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+      <!-- Header Section -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Quản lý Đào tạo</h1>
+        <p class="text-gray-600">
+          Quản lý và theo dõi các khóa đào tạo và đăng ký của nhân viên
+        </p>
+      </div>
+
+      <!-- Stats Cards -->
+
+      <!-- Action Bar -->
+      <div class="bg-white rounded-lg shadow mb-6 p-4">
+        <div
+          class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0"
+        >
+          <div class="flex-1">
+            <div class="relative">
+              <i
+                class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              ></i>
+              <input
+                type="text"
+                placeholder="Tìm kiếm đăng ký..."
+                class="search-input pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full md:w-80 focus:border-blue-500"
+              />
+            </div>
+          </div>
+          <div class="flex space-x-3">
+            <button
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center"
+            >
+              <i class="fas fa-plus mr-2"></i>
+              Thêm mới
+            </button>
+            <button
+              class="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg flex items-center"
+            >
+              <i class="fas fa-filter mr-2"></i>
+              Lọc
+            </button>
+            <button
+              class="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg flex items-center"
+            >
+              <i class="fas fa-download mr-2"></i>
+              Xuất file
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Training Registrations Table -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="bg-gray-50 border-b border-gray-200">
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  <div class="flex items-center">
+                    <span>Mã đăng ký</span>
+                  </div>
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Nhân viên
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Khóa đào tạo
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Ngày đăng ký
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Trạng thái
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Hành động
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <!-- Row 1 -->
+              <tr class="table-row">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">
+                    REG-2024-001
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 flex-shrink-0">
+                      <img
+                        class="h-10 w-10 rounded-full object-cover"
+                        src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ab87b06d-17a5-4fdf-8fa5-df5b16d70bff.png"
+                        alt="Portrait of Nguyen Van A - male employee with black hair and professional attire"
+                        onerror="this.src='https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/72937e90-1cf2-4df4-b265-05570d552dbe.png?text=NV'"
+                      />
+                    </div>
+                    <div class="ml-4">
+                      <div class="text-sm font-medium text-gray-900">
+                        Nguyễn Văn A
+                      </div>
+                      <div class="text-sm text-gray-500">NV001</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">
+                    Kỹ năng quản lý thời gian
+                  </div>
+                  <div class="text-sm text-gray-500">
+                    15/01/2024 - 17/01/2024
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">10/01/2024</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span
+                    class="status-approved px-3 py-1 text-xs font-medium rounded-full"
+                    >Đã duyệt</span
+                  >
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex space-x-2">
+                    <button class="text-blue-600 hover:text-blue-900">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-green-600 hover:text-green-900">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-900">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 2 -->
+              <tr class="table-row">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">
+                    REG-2024-002
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 flex-shrink-0">
+                      <img
+                        class="h-10 w-10 rounded-full object-cover"
+                        src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/29314b90-c08d-4b2e-9730-85b59a2131a5.png"
+                        alt="Portrait of Tran Thi B - female employee with brown hair and professional smile"
+                        onerror="this.src='https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0dac02f1-5dba-4be6-a59e-9cb38fb3f33e.png?text=NV'"
+                      />
+                    </div>
+                    <div class="ml-4">
+                      <div class="text-sm font-medium text-gray-900">
+                        Trần Thị B
+                      </div>
+                      <div class="text-sm text-gray-500">NV002</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">
+                    Kỹ năng giao tiếp hiệu quả
+                  </div>
+                  <div class="text-sm text-gray-500">
+                    20/01/2024 - 22/01/2024
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">12/01/2024</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span
+                    class="status-pending px-3 py-1 text-xs font-medium rounded-full"
+                    >Chờ duyệt</span
+                  >
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex space-x-2">
+                    <button class="text-blue-600 hover:text-blue-900">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-green-600 hover:text-green-900">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-900">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 3 -->
+              <tr class="table-row">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">
+                    REG-2024-003
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 flex-shrink-0">
+                      <img
+                        class="h-10 w-10 rounded-full object-cover"
+                        src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fa4a5671-d7db-49e8-b7e1-debe7ff1cd17.png"
+                        alt="Portrait of Le Van C - male employee with glasses and formal business attire"
+                        onerror="this.src='https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/916e1ef9-9cab-4714-8129-c7a94ee0f5ed.png'"
+                      />
+                    </div>
+                    <div class="ml-4">
+                      <div class="text-sm font-medium text-gray-900">
+                        Lê Văn C
+                      </div>
+                      <div class="text-sm text-gray-500">NV003</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">
+                    Quản lý dự án chuyên nghiệp
+                  </div>
+                  <div class="text-sm text-gray-500">
+                    25/01/2024 - 27/01/2024
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">15/01/2024</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span
+                    class="status-rejected px-3 py-1 text-xs font-medium rounded-full"
+                    >Từ chối</span
+                  >
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex space-x-2">
+                    <button class="text-blue-600 hover:text-blue-900">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-green-600 hover:text-green-900">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-900">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 4 -->
+              <tr class="table-row">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">
+                    REG-2024-004
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 flex-shrink-0">
+                      <img
+                        class="h-10 w-10 rounded-full object-cover"
+                        src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4ef270a3-a082-4371-a6fa-a15e3642a1e4.png"
+                        alt="Portrait of Pham Thi D - female employee with professional hairstyle and business casual attire"
+                        onerror="this.src='https://placehold.co/40x40?text=NV'"
+                      />
+                    </div>
+                    <div class="ml-4">
+                      <div class="text-sm font-medium text-gray-900">
+                        Phạm Thị D
+                      </div>
+                      <div class="text-sm text-gray-500">NV004</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">Kỹ năng thuyết trình</div>
+                  <div class="text-sm text-gray-500">
+                    05/02/2024 - 07/02/2024
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">20/01/2024</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span
+                    class="status-completed px-3 py-1 text-xs font-medium rounded-full"
+                    >Hoàn thành</span
+                  >
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex space-x-2">
+                    <button class="text-blue-600 hover:text-blue-900">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-green-600 hover:text-green-900">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-900">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Row 5 -->
+              <tr class="table-row">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">
+                    REG-2024-005
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 flex-shrink-0">
+                      <img
+                        class="h-10 w-10 rounded-full object-cover"
+                        src="https://placehold.co/40x40"
+                        alt="Portrait of Hoang Van E - male employee with confident expression and modern business attire"
+                        onerror="this.src='https://placehold.co/40x40?text=NV'"
+                      />
+                    </div>
+                    <div class="ml-4">
+                      <div class="text-sm font-medium text-gray-900">
+                        Hoàng Văn E
+                      </div>
+                      <div class="text-sm text-gray-500">NV005</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">
+                    Lãnh đạo nhóm hiệu quả
+                  </div>
+                  <div class="text-sm text-gray-500">
+                    15/02/2024 - 17/02/2024
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">25/01/2024</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span
+                    class="status-approved px-3 py-1 text-xs font-medium rounded-full"
+                    >Đã duyệt</span
+                  >
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex space-x-2">
+                    <button class="text-blue-600 hover:text-blue-900">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="text-green-600 hover:text-green-900">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="text-red-600 hover:text-red-900">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="bg-white px-6 py-4 border-t border-gray-200">
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-700">
+              Hiển thị <span class="font-medium">1</span> đến
+              <span class="font-medium">5</span> của
+              <span class="font-medium">156</span> kết quả
+            </div>
+            <div class="flex space-x-2">
+              <button
+                class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              >
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <button
+                class="px-3 py-1 border border-blue-500 bg-blue-50 text-blue-600 rounded-md font-medium"
+              >
+                1
+              </button>
+              <button
+                class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              >
+                2
+              </button>
+              <button
+                class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              >
+                3
+              </button>
+              <button
+                class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              >
+                ...
+              </button>
+              <button
+                class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              >
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Basic search functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector(".search-input");
+        const tableRows = document.querySelectorAll(".table-row");
+
+        searchInput.addEventListener("input", function () {
+          const searchTerm = this.value.toLowerCase();
+
+          tableRows.forEach((row) => {
+            const rowText = row.textContent.toLowerCase();
+            if (rowText.includes(searchTerm)) {
+              row.style.display = "";
+            } else {
+              row.style.display = "none";
+            }
+          });
+        });
+
+        // Add click handlers for action buttons
+        document.querySelectorAll("button").forEach((button) => {
+          button.addEventListener("click", function () {
+            const action = this.querySelector("i").className;
+            if (action.includes("fa-eye")) {
+              console.log("Xem chi tiết");
+            } else if (action.includes("fa-edit")) {
+              console.log("Chỉnh sửa");
+            } else if (action.includes("fa-trash")) {
+              console.log("Xóa");
+            }
+          });
+        });
+      });
+    </script>
+  </main>
+</html>
