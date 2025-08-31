@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html
+  lang="vi"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tin Tức Công Ty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .news-article:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1);
+      }
+      .category-badge {
+        transition: all 0.3s ease;
+      }
+      .category-badge:hover {
+        background-color: #1e40af !important;
+      }
+    </style>
+  </head>
+  <main layout:fragment="content" class="font-sans bg-gray-50">
+    <!-- Main Content Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <!-- Page Header -->
+      <div class="mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+          Tin Tức & Sự Kiện
+        </h1>
+        <div class="max-w-7xl mx-auto mb-8">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+              <div class="relative">
+                <input
+                  type="text"
+                  placeholder="Tìm kiếm tài liệu..."
+                  class="search-box w-64 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <span class="absolute right-3 top-2.5 text-gray-400">🔍</span>
+              </div>
+              <button
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                onclick="window.location.href='/uploadnewspaper'"
+              >
+                + Tải lên
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <!-- News Article 1 -->
+        <article
+          class="news-article bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300"
+        >
+          <div class="h-48 overflow-hidden">
+            <img
+              src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f329f998-c7bb-457e-9a90-de39a6c0bc73.png"
+              alt="Sự kiện công nghệ Tech Summit 2023 với diễn giả quốc tế trên sân khấu hiện đại"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span
+                class="category-badge bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium"
+                >Sự Kiện</span
+              >
+              <span class="text-gray-500 text-sm">15/12/2023</span>
+            </div>
+            <h2
+              class="text-xl font-semibold text-gray-800 mb-3 hover:text-blue-600 transition-colors"
+            >
+              Tech Summit 2023: Tương Lai Của Trí Tuệ Nhân Tạo
+            </h2>
+            <p class="text-gray-600 mb-4 line-clamp-3">
+              Tham gia cùng chúng tôi tại sự kiện công nghệ lớn nhất năm với các
+              chuyên gia hàng đầu thế giới về AI và machine learning...
+            </p>
+            <div class="flex items-center justify-between">
+              <a
+                href="#"
+                class="text-blue-600 font-semibold hover:text-blue-800 flex items-center"
+              >
+                Đọc thêm
+                <i class="fas fa-arrow-right ml-2 text-sm"></i>
+              </a>
+              <div class="flex items-center text-gray-500 text-sm">
+                <i class="far fa-eye mr-1"></i>
+                1.2K
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- News Article 2 -->
+        <article
+          class="news-article bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300"
+        >
+          <div class="h-48 overflow-hidden">
+            <img
+              src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/98acf137-15c4-48b9-91d3-251fc41758d6.png"
+              alt="Văn phòng làm việc hiện đại tại Đà Nẵng với không gian mở và thiết kế tối ưu"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span
+                class="category-badge bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm font-medium"
+                >Mở Rộng</span
+              >
+              <span class="text-gray-500 text-sm">10/12/2023</span>
+            </div>
+            <h2
+              class="text-xl font-semibold text-gray-800 mb-3 hover:text-blue-600 transition-colors"
+            >
+              Khai Trương Trung Tâm Phát Triển Mới Tại Đà Nẵng
+            </h2>
+            <p class="text-gray-600 mb-4 line-clamp-3">
+              ABC Tech chính thức khai trương trung tâm phát triển công nghệ mới
+              tại Đà Nẵng, tạo thêm 200 việc làm chất lượng cao...
+            </p>
+            <div class="flex items-center justify-between">
+              <a
+                href="#"
+                class="text-blue-600 font-semibold hover:text-blue-800 flex items-center"
+              >
+                Đọc thêm
+                <i class="fas fa-arrow-right ml-2 text-sm"></i>
+              </a>
+              <div class="flex items-center text-gray-500 text-sm">
+                <i class="far fa-eye mr-1"></i>
+                987
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- News Article 3 -->
+        <article
+          class="news-article bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300"
+        >
+          <div class="h-48 overflow-hidden">
+            <img
+              src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6f05e072-1eb5-4363-95d8-9f1c57fdc4dd.png"
+              alt="Giải thưởng vàng công nghệ với huy chương và chứng nhận thành tựu xuất sắc"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span
+                class="category-badge bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-sm font-medium"
+                >Thành Tựu</span
+              >
+              <span class="text-gray-500 text-sm">05/12/2023</span>
+            </div>
+            <h2
+              class="text-xl font-semibold text-gray-800 mb-3 hover:text-blue-600 transition-colors"
+            >
+              Đạt Giải Vàng Sáng Tạo Công Nghệ ASEAN 2023
+            </h2>
+            <p class="text-gray-600 mb-4 line-clamp-3">
+              Dự án AI của chúng tôi vừa đạt giải thưởng cao nhất tại cuộc thi
+              công nghệ quốc tế với sự tham gia của 15 quốc gia...
+            </p>
+            <div class="flex items-center justify-between">
+              <a
+                href="#"
+                class="text-blue-600 font-semibold hover:text-blue-800 flex items-center"
+              >
+                Đọc thêm
+                <i class="fas fa-arrow-right ml-2 text-sm"></i>
+              </a>
+              <div class="flex items-center text-gray-500 text-sm">
+                <i class="far fa-eye mr-1"></i>
+                1.5K
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- News Article 4 -->
+        <article
+          class="news-article bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300"
+        >
+          <div class="h-48 overflow-hidden">
+            <img
+              src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9c765c0f-2913-44a9-b865-5ebca22da1ca.png"
+              alt="Đội ngũ kỹ sư công nghệ đang làm việc trên dự án phần mềm mới"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span
+                class="category-badge bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm font-medium"
+                >Công Nghệ</span
+              >
+              <span class="text-gray-500 text-sm">28/11/2023</span>
+            </div>
+            <h2
+              class="text-xl font-semibold text-gray-800 mb-3 hover:text-blue-600 transition-colors"
+            >
+              Ra Mắt Nền Tảng Quản Lý Doanh Nghiệp Thế Hệ Mới
+            </h2>
+            <p class="text-gray-600 mb-4 line-clamp-3">
+              ABC Tech chính thức ra mắt nền tảng quản lý doanh nghiệp tích hợp
+              AI, giúp tối ưu hóa quy trình vận hành và tăng hiệu suất...
+            </p>
+            <div class="flex items-center justify-between">
+              <a
+                href="#"
+                class="text-blue-600 font-semibold hover:text-blue-800 flex items-center"
+              >
+                Đọc thêm
+                <i class="fas fa-arrow-right ml-2 text-sm"></i>
+              </a>
+              <div class="flex items-center text-gray-500 text-sm">
+                <i class="far fa-eye mr-1"></i>
+                2.1K
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- News Article 5 -->
+        <article
+          class="news-article bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300"
+        >
+          <div class="h-48 overflow-hidden">
+            <img
+              src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/334c9094-959d-42d1-b7bd-62c5bfd55560.png"
+              alt="Buổi training nội bộ về công nghệ mới với các chuyên gia và nhân viên"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span
+                class="category-badge bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium"
+                >Đào Tạo</span
+              >
+              <span class="text-gray-500 text-sm">20/11/2023</span>
+            </div>
+            <h2
+              class="text-xl font-semibold text-gray-800 mb-3 hover:text-blue-600 transition-colors"
+            >
+              Chương Trình Đào Tạo Nâng Cao Kỹ Năng Công Nghệ
+            </h2>
+            <p class="text-gray-600 mb-4 line-clamp-3">
+              Triển khai chương trình đào tạo nội bộ với các khóa học về cloud
+              computing, cybersecurity và phát triển phần mềm...
+            </p>
+            <div class="flex items-center justify-between">
+              <a
+                href="#"
+                class="text-blue-600 font-semibold hover:text-blue-800 flex items-center"
+              >
+                Đọc thêm
+                <i class="fas fa-arrow-right ml-2 text-sm"></i>
+              </a>
+              <div class="flex items-center text-gray-500 text-sm">
+                <i class="far fa-eye mr-1"></i>
+                845
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- News Article 6 -->
+        <article
+          class="news-article bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300"
+        >
+          <div class="h-48 overflow-hidden">
+            <img
+              src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fc17c14e-d76b-4027-87a9-4eefe176c5ad.png"
+              alt="Hợp tác chiến lược giữa ABC Tech và đối tác quốc tế trong lĩnh vực công nghệ"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span
+                class="category-badge bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-sm font-medium"
+                >Hợp Tác</span
+              >
+              <span class="text-gray-500 text-sm">12/11/2023</span>
+            </div>
+            <h2
+              class="text-xl font-semibold text-gray-800 mb-3 hover:text-blue-600 transition-colors"
+            >
+              Ký Kết Hợp Tác Chiến Lược Với Tập Đoàn Công Nghệ Hàng Đầu
+            </h2>
+            <p class="text-gray-600 mb-4 line-clamp-3">
+              ABC Tech chính thức ký kết hợp tác chiến lược với tập đoàn công
+              nghệ đa quốc gia, mở ra cơ hội phát triển mới...
+            </p>
+            <div class="flex items-center justify-between">
+              <a
+                href="#"
+                class="text-blue-600 font-semibold hover:text-blue-800 flex items-center"
+              >
+                Đọc thêm
+                <i class="fas fa-arrow-right ml-2 text-sm"></i>
+              </a>
+              <div class="flex items-center text-gray-500 text-sm">
+                <i class="far fa-eye mr-1"></i>
+                1.3K
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-center items-center space-x-2">
+        <button
+          class="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+        >
+          <i class="fas fa-chevron-left text-sm"></i>
+        </button>
+
+        <button
+          class="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-600 text-white font-semibold"
+        >
+          1
+        </button>
+        <button
+          class="w-10 h-10 flex items-center justify-center rounded-lg bg-white text-gray-600 hover:bg-gray-100 transition-colors"
+        >
+          2
+        </button>
+        <button
+          class="w-10 h-10 flex items-center justify-center rounded-lg bg-white text-gray-600 hover:bg-gray-100 transition-colors"
+        >
+          3
+        </button>
+        <span class="px-2 text-gray-500">...</span>
+        <button
+          class="w-10 h-10 flex items-center justify-center rounded-lg bg-white text-gray-600 hover:bg-gray-100 transition-colors"
+        >
+          8
+        </button>
+
+        <button
+          class="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+        >
+          <i class="fas fa-chevron-right text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Newsletter Subscription -->
+      <div
+        class="mt-16 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 text-center text-white"
+      >
+        <h2 class="text-2xl md:text-3xl font-bold mb-4">
+          Đừng Bỏ Lỡ Tin Tức Mới Nhất
+        </h2>
+        <p class="text-blue-100 mb-6 max-w-2xl mx-auto">
+          Đăng ký nhận bản tin để cập nhật những thông tin mới nhất về công
+          nghệ, sự kiện và cơ hội nghề nghiệp từ ABC Tech
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <input
+            type="email"
+            placeholder="Email của bạn"
+            class="flex-1 px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          />
+          <button
+            class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors whitespace-nowrap"
+          >
+            Đăng Ký Ngay
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Simple animation for news articles
+      document.addEventListener("DOMContentLoaded", function () {
+        const articles = document.querySelectorAll(".news-article");
+
+        articles.forEach((article, index) => {
+          article.style.opacity = "0";
+          article.style.transform = "translateY(20px)";
+          article.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+
+          setTimeout(() => {
+            article.style.opacity = "1";
+            article.style.transform = "translateY(0)";
+          }, 100 + index * 100);
+        });
+
+        // Pagination click handler
+        document.querySelectorAll(".pagination button").forEach((button) => {
+          button.addEventListener("click", function () {
+            alert("Chức năng phân trang sẽ được tích hợp với backend");
+          });
+        });
+      });
+    </script>
+  </main>
+</html>

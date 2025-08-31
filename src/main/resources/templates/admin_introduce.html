@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html
+  lang="vi"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giới Thiệu Công Ty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      main {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
+      }
+
+      .hero-section {
+        background: linear-gradient(
+          135deg,
+          rgba(59, 130, 246, 0.9) 0%,
+          rgba(29, 78, 216, 0.9) 100%
+        );
+        color: white;
+        border-radius: 24px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+
+      .hero-pattern {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.3;
+      }
+
+      .section-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+      }
+
+      .section-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 35px rgba(0, 0, 0, 0.12);
+      }
+
+      .value-card {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+        text-align: center;
+      }
+
+      .value-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .team-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+        text-align: center;
+      }
+
+      .team-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-card {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        border-radius: 16px;
+        padding: 30px;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 35px rgba(59, 130, 246, 0.3);
+      }
+
+      .timeline-item {
+        position: relative;
+        padding-left: 60px;
+        margin-bottom: 40px;
+      }
+
+      .timeline-dot {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 40px;
+        height: 40px;
+        background: #3b82f6;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+      }
+
+      .timeline-content {
+        background: white;
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .hover-lift {
+        transition: all 0.3s ease;
+      }
+
+      .hover-lift:hover {
+        transform: translateY(-2px);
+      }
+
+      .partner-logo {
+        transition: all 0.3s ease;
+        filter: grayscale(100%);
+        opacity: 0.7;
+      }
+
+      .partner-logo:hover {
+        filter: grayscale(0%);
+        opacity: 1;
+        transform: scale(1.1);
+      }
+    </style>
+  </head>
+  <main layout:fragment="content" class="py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <!-- Hero Section -->
+      <div class="hero-section mb-16">
+        <div class="hero-pattern"></div>
+        <div class="hero-content p-12 text-center">
+          <h1 class="text-4xl md:text-5xl font-bold mb-6">
+            Chào Mừng Đến Với
+            <span class="text-white">TechVision</span>
+          </h1>
+          <p class="text-xl md:text-2xl mb-8 opacity-90">
+            Cùng nhau kiến tạo tương lai công nghệ với những giải pháp đột phá
+          </p>
+        </div>
+      </div>
+
+      <!-- About Section -->
+      <div class="section-card mb-16">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">
+              <span class="gradient-text">Câu Chuyện</span> Của Chúng Tôi
+            </h2>
+            <p class="text-gray-600 text-lg leading-relaxed mb-6">
+              Thành lập từ năm 2010, TechVision bắt đầu với sứ mệnh mang lại
+              những giải pháp công nghệ tiên tiến cho doanh nghiệp Việt Nam. Từ
+              một nhóm nhỏ với 5 thành viên, chúng tôi đã phát triển thành công
+              ty hàng đầu trong lĩnh vực công nghệ với hơn 200 nhân sự.
+            </p>
+            <p class="text-gray-600 text-lg leading-relaxed">
+              Chúng tôi tin rằng công nghệ không chỉ là công cụ, mà là cầu nối
+              giúp doanh nghiệp đạt được những bước tiến vượt bậc và tạo ra giá
+              trị bền vững cho cộng đồng.
+            </p>
+          </div>
+          <div class="text-center">
+            <img
+              src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+              alt="Đội ngũ TechVision làm việc trong không gian hiện đại"
+              class="rounded-2xl shadow-2xl hover-lift"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission & Vision -->
+      <div class="grid md:grid-cols-2 gap-8 mb-16">
+        <div class="section-card">
+          <div
+            class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6"
+          >
+            <span class="text-2xl text-blue-600">🎯</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Sứ Mệnh</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Cung cấp các giải pháp công nghệ đột phá giúp doanh nghiệp tối ưu
+            hóa hoạt động, nâng cao hiệu suất và tăng trưởng bền vững. Chúng tôi
+            cam kết mang lại giá trị thực sự cho khách hàng thông qua sự đổi mới
+            và chất lượng dịch vụ vượt trội.
+          </p>
+        </div>
+
+        <div class="section-card">
+          <div
+            class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6"
+          >
+            <span class="text-2xl text-green-600">🔮</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Tầm Nhìn</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Trở thành đối tác công nghệ hàng đầu tại Đông Nam Á, tiên phong
+            trong việc ứng dụng các công nghệ mới như AI, Blockchain và IoT.
+            Chúng tôi hướng đến việc tạo ra hệ sinh thái công nghệ toàn diện cho
+            doanh nghiệp trong kỷ nguyên số.
+          </p>
+        </div>
+      </div>
+
+      <!-- Core Values -->
+      <div class="mb-16">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
+          <span class="gradient-text">Giá Trị Cốt Lõi</span>
+        </h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="value-card">
+            <div
+              class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6"
+            >
+              <span class="text-2xl text-blue-600">💡</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">
+              Đổi Mới Sáng Tạo
+            </h3>
+            <p class="text-gray-600">
+              Luôn tìm kiếm và ứng dụng những giải pháp mới, sáng tạo để giải
+              quyết các thách thức kinh doanh phức tạp.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div
+              class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6"
+            >
+              <span class="text-2xl text-green-600">🤝</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">
+              Hợp Tác Chặt Chẽ
+            </h3>
+            <p class="text-gray-600">
+              Lắng nghe và làm việc cùng khách hàng như đối tác chiến lược để
+              đạt được kết quả tốt nhất cho cả hai bên.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div
+              class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6"
+            >
+              <span class="text-2xl text-purple-600">⭐</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">
+              Chất Lượng Xuất Sắc
+            </h3>
+            <p class="text-gray-600">
+              Cam kết mang lại sản phẩm và dịch vụ với chất lượng tốt nhất, vượt
+              qua sự mong đợi của khách hàng.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistics -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+        <div class="stat-card">
+          <div class="text-3xl font-bold mb-2">12+</div>
+          <div class="text-sm opacity-90">Năm Kinh Nghiệm</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-3xl font-bold mb-2">200+</div>
+          <div class="text-sm opacity-90">Nhân Sự</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-3xl font-bold mb-2">500+</div>
+          <div class="text-sm opacity-90">Dự Án</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-3xl font-bold mb-2">98%</div>
+          <div class="text-sm opacity-90">Hài Lòng</div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="section-card mb-16">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
+          <span class="gradient-text">Hành Trình Phát Triển</span>
+        </h2>
+
+        <div class="space-y-8">
+          <div class="timeline-item">
+            <div class="timeline-dot">2010</div>
+            <div class="timeline-content">
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                Thành Lập
+              </h3>
+              <p class="text-gray-600">
+                TechVision được thành lập với 5 thành viên sáng lập, bắt đầu
+                hành trình mang công nghệ đến với doanh nghiệp Việt Nam.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot">2014</div>
+            <div class="timeline-content">
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                Mở Rộng Quy Mô
+              </h3>
+              <p class="text-gray-600">
+                Mở rộng quy mô lên 50 nhân sự và hoàn thành dự án thứ 100. Bắt
+                đầu hợp tác với các doanh nghiệp quốc tế.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot">2018</div>
+            <div class="timeline-content">
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                Đổi Mới Công Nghệ
+              </h3>
+              <p class="text-gray-600">
+                Tiên phong ứng dụng AI và Machine Learning vào các giải pháp.
+                Đạt giải thưởng Công nghệ Sáng tạo.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot">2024</div>
+            <div class="timeline-content">
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                Toàn Cầu Hóa
+              </h3>
+              <p class="text-gray-600">
+                Mở rộng hoạt động ra thị trường quốc tế với hơn 200 nhân sự và
+                500+ dự án thành công.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leadership Team -->
+      <div class="mb-16">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
+          <span class="gradient-text">Đội Ngũ Lãnh Đạo</span>
+        </h2>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="team-card">
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+              alt="CEO Nguyễn Văn A"
+              class="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
+            />
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+              Nguyễn Văn A
+            </h3>
+            <p class="text-blue-600 font-medium mb-2">CEO & Founder</p>
+            <p class="text-gray-600 text-sm">
+              15+ năm kinh nghiệm trong lĩnh vực công nghệ và khởi nghiệp.
+            </p>
+          </div>
+
+          <div class="team-card">
+            <img
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+              alt="CTO Trần Thị B"
+              class="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
+            />
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Trần Thị B</h3>
+            <p class="text-blue-600 font-medium mb-2">CTO</p>
+            <p class="text-gray-600 text-sm">
+              Chuyên gia về AI và hệ thống phân tán với 12 năm kinh nghiệm.
+            </p>
+          </div>
+
+          <div class="team-card">
+            <img
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+              alt="CFO Lê Văn C"
+              class="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
+            />
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Lê Văn C</h3>
+            <p class="text-blue-600 font-medium mb-2">CFO</p>
+            <p class="text-gray-600 text-sm">
+              Quản lý tài chính với kinh nghiệm tại các tập đoàn đa quốc gia.
+            </p>
+          </div>
+
+          <div class="team-card">
+            <img
+              src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+              alt="COO Phạm Thị D"
+              class="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
+            />
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Phạm Thị D</h3>
+            <p class="text-blue-600 font-medium mb-2">COO</p>
+            <p class="text-gray-600 text-sm">
+              Chuyên gia vận hành với nền tảng từ các công ty công nghệ hàng
+              đầu.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Partners -->
+      <div class="section-card">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
+          <span class="gradient-text">Đối Tác</span> Của Chúng Tôi
+        </h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+          <img
+            src="https://placehold.co/120x60"
+            alt="Đối tác Microsoft"
+            class="partner-logo mx-auto"
+          />
+          <img
+            src="https://placehold.co/120x60"
+            alt="Đối tác Google"
+            class="partner-logo mx-auto"
+          />
+          <img
+            src="https://placehold.co/120x60"
+            alt="Đối tác Amazon"
+            class="partner-logo mx-auto"
+          />
+          <img
+            src="https://placehold.co/120x60"
+            alt="Đối tác IBM"
+            class="partner-logo mx-auto"
+          />
+          <img
+            src="https://placehold.co/120x60"
+            alt="Đối tác Samsung"
+            class="partner-logo mx-auto"
+          />
+          <img
+            src="https://placehold.co/120x60"
+            alt="Đối tác Intel"
+            class="partner-logo mx-auto"
+          />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Add some interactive effects
+      document.addEventListener("DOMContentLoaded", function () {
+        // Add hover effects to team cards
+        const teamCards = document.querySelectorAll(".team-card");
+        teamCards.forEach((card) => {
+          card.addEventListener("mouseenter", () => {
+            card.style.transform = "translateY(-8px)";
+            card.style.boxShadow = "0 12px 40px rgba(0, 0, 0, 0.15)";
+          });
+
+          card.addEventListener("mouseleave", () => {
+            card.style.transform = "translateY(0)";
+            card.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.06)";
+          });
+        });
+
+        // Add click effect to CTA button
+        const ctaButton = document.querySelector(".pulse");
+        ctaButton.addEventListener("click", () => {
+          alert(
+            "Cảm ơn bạn đã quan tâm đến TechVision! Chúng tôi sẽ liên hệ với bạn sớm nhất."
+          );
+        });
+      });
+    </script>
+  </main>
+</html>

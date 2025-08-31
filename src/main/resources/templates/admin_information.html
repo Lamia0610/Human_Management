@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html
+  lang="vi"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Phản Hồi Nhân Viên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .table-row-hover:hover {
+        background: rgba(99, 102, 241, 0.05);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+      }
+
+      .status-badge {
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .search-input:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      }
+    </style>
+  </head>
+  <main layout:fragment="content">
+    <div class="min-h-screen flex items-center justify-center">
+      <div class="glass-effect w-full max-w-7xl mx-auto p-8 shadow-2xl">
+        <!-- Header Section -->
+        <div
+          class="flex flex-col md:flex-row justify-between items-center mb-8"
+        >
+          <div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">
+              Tiếp Nhận Thông Tin
+            </h1>
+            <p class="text-gray-600">
+              Theo dõi và quản lý tất cả phản hồi từ nhân viên
+            </p>
+          </div>
+
+          <div class="flex items-center space-x-4 mt-4 md:mt-0">
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Tìm kiếm nhân viên..."
+                class="search-input pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                id="searchInput"
+              />
+              <i
+                class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              ></i>
+            </div>
+
+            <select
+              class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              id="statusFilter"
+            >
+              <option value="all">Tất cả trạng thái</option>
+              <option value="pending">Chờ xử lý</option>
+              <option value="processing">Đang xử lý</option>
+              <option value="resolved">Đã giải quyết</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div
+            class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100"
+          >
+            <div class="flex items-center">
+              <div class="bg-blue-100 p-3 rounded-lg">
+                <i class="fas fa-comments text-blue-600 text-xl"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-2xl font-bold text-gray-800">24</h3>
+                <p class="text-gray-600">Tổng phản hồi</p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-xl border border-orange-100"
+          >
+            <div class="flex items-center">
+              <div class="bg-orange-100 p-3 rounded-lg">
+                <i class="fas fa-clock text-orange-600 text-xl"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-2xl font-bold text-gray-800">8</h3>
+                <p class="text-gray-600">Chờ xử lý</p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-100"
+          >
+            <div class="flex items-center">
+              <div class="bg-green-100 p-3 rounded-lg">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="text-2xl font-bold text-gray-800">16</h3>
+                <p class="text-gray-600">Đã giải quyết</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="overflow-x-auto rounded-xl">
+          <table class="w-full table-auto">
+            <thead>
+              <tr class="bg-gray-50 text-gray-700">
+                <th class="px-6 py-4 text-left font-semibold">STT</th>
+                <th class="px-6 py-4 text-left font-semibold">Nhân viên</th>
+                <th class="px-6 py-4 text-left font-semibold">Email</th>
+                <th class="px-6 py-4 text-left font-semibold">Phản hồi</th>
+                <th class="px-6 py-4 text-left font-semibold">Trạng thái</th>
+                <th class="px-6 py-4 text-left font-semibold">Ngày tạo</th>
+                <th class="px-6 py-4 text-left font-semibold">Hành động</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200" id="employeeTable">
+              <!-- Data will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-between items-center mt-6">
+          <div class="text-gray-600">
+            Hiển thị <span id="currentItems">1-10</span> của
+            <span id="totalItems">24</span> mục
+          </div>
+          <div class="flex space-x-2">
+            <button
+              class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="px-3 py-2 bg-indigo-600 text-white rounded-lg">
+              1
+            </button>
+            <button
+              class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              2
+            </button>
+            <button
+              class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              3
+            </button>
+            <button
+              class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Sample data for employees and their feedback
+      const employeesData = [
+        {
+          id: 1,
+          name: "Nguyễn Văn An",
+          email: "nguyen.van.an@company.com",
+          avatar:
+            "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/21cc9cd3-bc0a-471a-b70a-6cc50931722b.png",
+          feedback: "Đề xuất cải thiện phần mềm quản lý dự án",
+          status: "pending",
+          date: "15/12/2023",
+        },
+        {
+          id: 2,
+          name: "Trần Thị Bích",
+          email: "tran.thi.bich@company.com",
+          avatar: "https://placehold.co/40x40",
+          feedback: "Cần hỗ trợ thiết bị làm việc tại nhà",
+          status: "processing",
+          date: "14/12/2023",
+        },
+        {
+          id: 3,
+          name: "Lê Minh Cường",
+          email: "le.minh.cuong@company.com",
+          avatar: "https://placehold.co/40x40",
+          feedback: "Góp ý về chế độ đãi ngộ và lương thưởng",
+          status: "resolved",
+          date: "13/12/2023",
+        },
+        {
+          id: 4,
+          name: "Phạm Thu Hà",
+          email: "pham.thu.ha@company.com",
+          avatar: "https://placehold.co/40x40",
+          feedback: "Đề nghị tổ chức training kỹ năng mềm",
+          status: "pending",
+          date: "12/12/2023",
+        },
+        {
+          id: 5,
+          name: "Hoàng Văn Đức",
+          email: "hoang.van.duc@company.com",
+          avatar: "https://placehold.co/40x40",
+          feedback: "Phản ánh về môi trường làm việc văn phòng",
+          status: "processing",
+          date: "11/12/2023",
+        },
+        {
+          id: 6,
+          name: "Đỗ Thị Mai",
+          email: "do.thi.mai@company.com",
+          avatar: "https://placehold.co/40x40",
+          feedback: "Đề xuất thay đổi giờ làm việc linh hoạt",
+          status: "resolved",
+          date: "10/12/2023",
+        },
+        {
+          id: 7,
+          name: "Vũ Quang Huy",
+          email: "vu.quang.huy@company.com",
+          avatar: "https://placehold.co/40x40",
+          feedback: "Yêu cầu bổ sung nhân sự cho dự án mới",
+          status: "pending",
+          date: "09/12/2023",
+        },
+        {
+          id: 8,
+          name: "Ngô Thanh Tùng",
+          email: "ngo.thanh.tung@company.com",
+          avatar: "https://placehold.co/40x40",
+          feedback: "Góp ý về quy trình làm việc nội bộ",
+          status: "processing",
+          date: "08/12/2023",
+        },
+        {
+          id: 9,
+          name: "Bùi Thị Lan",
+          email: "bui.thi.lan@company.com",
+          avatar: "https://placehold.co/40x40",
+          feedback: "Đề nghị cập nhật phần mềm bảo mật",
+          status: "resolved",
+          date: "07/12/2023",
+        },
+        {
+          id: 10,
+          name: "Đinh Văn Nam",
+          email: "dinh.van.nam@company.com",
+          avatar: "https://placehold.co/40x40",
+          feedback: "Phản ánh về chất lượng dịch vụ internet",
+          status: "pending",
+          date: "06/12/2023",
+        },
+      ];
+
+      // Function to render table rows
+      function renderTable(data) {
+        const tableBody = document.getElementById("employeeTable");
+        tableBody.innerHTML = "";
+
+        data.forEach((employee, index) => {
+          const row = document.createElement("tr");
+          row.className = "table-row-hover";
+
+          // Determine status badge class
+          let statusClass = "";
+          let statusText = "";
+          switch (employee.status) {
+            case "pending":
+              statusClass = "bg-yellow-100 text-yellow-800";
+              statusText = "Chờ xử lý";
+              break;
+            case "processing":
+              statusClass = "bg-blue-100 text-blue-800";
+              statusText = "Đang xử lý";
+              break;
+            case "resolved":
+              statusClass = "bg-green-100 text-green-800";
+              statusText = "Đã giải quyết";
+              break;
+          }
+
+          row.innerHTML = `
+                    <td class="px-6 py-4 font-medium text-gray-900">${
+                      index + 1
+                    }</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center">
+                            <img src="${employee.avatar}" alt="Portrait of ${
+            employee.name
+          } - professional employee photo" class="w-10 h-10 rounded-full mr-3" onerror="this.src='https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/636dd661-4691-46f4-998e-718acce9fc10.png'">
+                            <div>
+                                <div class="font-medium text-gray-900">${
+                                  employee.name
+                                }</div>
+                                <div class="text-sm text-gray-500">ID: ${employee.id
+                                  .toString()
+                                  .padStart(4, "0")}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-gray-700">${employee.email}</td>
+                    <td class="px-6 py-4 max-w-xs">
+                        <div class="text-gray-800 truncate" title="${
+                          employee.feedback
+                        }">${employee.feedback}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">${employee.date}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2">
+                            <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="p-2 text-green-600 hover:bg-green-50 rounded-lg" title="Phản hồi">
+                                <i class="fas fa-reply"></i>
+                            </button>
+                            <button class="p-2 text-red-600 hover:bg-red-50 rounded-lg" title="Xóa">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+          tableBody.appendChild(row);
+        });
+      }
+
+      // Search functionality
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", function (e) {
+          const searchTerm = e.target.value.toLowerCase();
+          const filteredData = employeesData.filter(
+            (employee) =>
+              employee.name.toLowerCase().includes(searchTerm) ||
+              employee.email.toLowerCase().includes(searchTerm) ||
+              employee.feedback.toLowerCase().includes(searchTerm)
+          );
+          renderTable(filteredData);
+        });
+
+      // Filter by status
+      document
+        .getElementById("statusFilter")
+        .addEventListener("change", function (e) {
+          const status = e.target.value;
+          if (status === "all") {
+            renderTable(employeesData);
+          } else {
+            const filteredData = employeesData.filter(
+              (employee) => employee.status === status
+            );
+            renderTable(filteredData);
+          }
+        });
+
+      // Initial render
+      renderTable(employeesData);
+    </script>
+  </main>
+</html>

@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html
+  lang="vi"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Năng Suất Nhân Sự - HR System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      main {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
+      }
+
+      .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      }
+
+      .stat-card.primary {
+        border-left-color: #3b82f6;
+      }
+      .stat-card.success {
+        border-left-color: #10b981;
+      }
+      .stat-card.warning {
+        border-left-color: #f59e0b;
+      }
+      .stat-card.danger {
+        border-left-color: #ef4444;
+      }
+      .stat-card.purple {
+        border-left-color: #8b5cf6;
+      }
+
+      .chart-container {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .employee-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+      }
+
+      .employee-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .progress-bar {
+        transition: width 0.5s ease-in-out;
+      }
+
+      .trend-indicator {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .trend-up {
+        background: #dcfce7;
+        color: #16a34a;
+      }
+
+      .trend-down {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+
+      .performance-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .performance-excellent {
+        background: #dcfce7;
+        color: #16a34a;
+      }
+
+      .performance-good {
+        background: #dbeafe;
+        color: #2563eb;
+      }
+
+      .performance-average {
+        background: #fef3c7;
+        color: #d97706;
+      }
+
+      .performance-poor {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .kpi-meter {
+        position: relative;
+        width: 100px;
+        height: 100px;
+      }
+
+      .kpi-value {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-weight: 700;
+        font-size: 18px;
+      }
+
+      .department-tag {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .tag-development {
+        background: #dbeafe;
+        color: #2563eb;
+      }
+      .tag-sales {
+        background: #dcfce7;
+        color: #16a34a;
+      }
+      .tag-marketing {
+        background: #fdf2f8;
+        color: #db2777;
+      }
+      .tag-hr {
+        background: #fef3c7;
+        color: #d97706;
+      }
+      .tag-finance {
+        background: #e0e7ff;
+        color: #4f46e5;
+      }
+    </style>
+  </head>
+  <main layout:fragment="content" class="py-8">
+    <div class="dashboard-container">
+      <!-- Header Section -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">
+          <span class="gradient-text">Bảng Điều Khiển Năng Suất</span>
+        </h1>
+        <p class="text-gray-600 mt-2">
+          Theo dõi và phân tích hiệu suất làm việc của nhân viên
+        </p>
+      </div>
+
+      <!-- Statistics Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+        <!-- Overall Productivity -->
+        <div class="stat-card primary">
+          <div class="flex items-center justify-between mb-4">
+            <div
+              class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center"
+            >
+              <span class="text-2xl text-blue-600">📊</span>
+            </div>
+            <span class="trend-indicator trend-up">+8% ↗</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">87.5%</h3>
+          <p class="text-gray-600">Năng suất tổng thể</p>
+          <div class="mt-3 w-full bg-gray-200 rounded-full h-2">
+            <div
+              class="progress-bar bg-blue-600 h-2 rounded-full"
+              style="width: 87.5%"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Completed Tasks -->
+        <div class="stat-card success">
+          <div class="flex items-center justify-between mb-4">
+            <div
+              class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center"
+            >
+              <span class="text-2xl text-green-600">✅</span>
+            </div>
+            <span class="trend-indicator trend-up">+12% ↗</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">1,247</h3>
+          <p class="text-gray-600">Công việc hoàn thành</p>
+          <div class="mt-3 w-full bg-gray-200 rounded-full h-2">
+            <div
+              class="progress-bar bg-green-600 h-2 rounded-full"
+              style="width: 85%"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Pending Tasks -->
+        <div class="stat-card warning">
+          <div class="flex items-center justify-between mb-4">
+            <div
+              class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center"
+            >
+              <span class="text-2xl text-orange-600">⏳</span>
+            </div>
+            <span class="trend-indicator trend-down">-5% ↘</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">156</h3>
+          <p class="text-gray-600">Công việc đang chờ</p>
+          <div class="mt-3 w-full bg-gray-200 rounded-full h-2">
+            <div
+              class="progress-bar bg-orange-600 h-2 rounded-full"
+              style="width: 25%"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Overtime Hours -->
+        <div class="stat-card danger">
+          <div class="flex items-center justify-between mb-4">
+            <div
+              class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center"
+            >
+              <span class="text-2xl text-red-600">⏰</span>
+            </div>
+            <span class="trend-indicator trend-up">+15% ↗</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">245h</h3>
+          <p class="text-gray-600">Giờ làm thêm</p>
+          <div class="mt-3 w-full bg-gray-200 rounded-full h-2">
+            <div
+              class="progress-bar bg-red-600 h-2 rounded-full"
+              style="width: 60%"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Employee Satisfaction -->
+        <div class="stat-card purple">
+          <div class="flex items-center justify-between mb-4">
+            <div
+              class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center"
+            >
+              <span class="text-2xl text-purple-600">😊</span>
+            </div>
+            <span class="trend-indicator trend-up">+3% ↗</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">4.7/5</h3>
+          <p class="text-gray-600">Mức độ hài lòng</p>
+          <div class="mt-3 w-full bg-gray-200 rounded-full h-2">
+            <div
+              class="progress-bar bg-purple-600 h-2 rounded-full"
+              style="width: 94%"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Productivity Trend -->
+        <div class="chart-container">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold text-gray-900">Xu Hướng Năng Suất</h2>
+            <select class="border border-gray-300 rounded-lg px-3 py-1 text-sm">
+              <option>6 tháng qua</option>
+              <option>12 tháng qua</option>
+              <option>Năm 2024</option>
+            </select>
+          </div>
+          <canvas id="productivityChart" height="250"></canvas>
+        </div>
+
+        <!-- Department Comparison -->
+        <div class="chart-container">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold text-gray-900">
+              So Sánh Theo Phòng Ban
+            </h2>
+            <select class="border border-gray-300 rounded-lg px-3 py-1 text-sm">
+              <option>Quý 2/2024</option>
+              <option>Quý 1/2024</option>
+              <option>Năm 2023</option>
+            </select>
+          </div>
+          <canvas id="departmentChart" height="250"></canvas>
+        </div>
+      </div>
+
+      <!-- Top Performers -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-gray-900">
+            Nhân Viên Hiệu Suất Cao
+          </h2>
+          <button class="text-blue-600 hover:underline">Xem tất cả</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Employee 1 -->
+          <div class="employee-card">
+            <div class="flex items-center mb-4">
+              <img
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                alt="Nguyễn Văn A"
+                class="w-16 h-16 rounded-full object-cover mr-4"
+              />
+              <div>
+                <h3 class="font-semibold text-gray-900">Nguyễn Văn A</h3>
+                <span class="department-tag tag-development">Phát triển</span>
+              </div>
+            </div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-gray-600">KPI:</span>
+              <span class="font-bold text-green-600">96%</span>
+            </div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-gray-600">Công việc:</span>
+              <span class="font-bold">45/48</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Đánh giá:</span>
+              <span class="performance-badge performance-excellent"
+                >Xuất sắc</span
+              >
+            </div>
+          </div>
+
+          <!-- Employee 2 -->
+          <div class="employee-card">
+            <div class="flex items-center mb-4">
+              <img
+                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                alt="Trần Thị B"
+                class="w-16 h-16 rounded-full object-cover mr-4"
+              />
+              <div>
+                <h3 class="font-semibold text-gray-900">Trần Thị B</h3>
+                <span class="department-tag tag-sales">Kinh doanh</span>
+              </div>
+            </div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-gray-600">KPI:</span>
+              <span class="font-bold text-green-600">92%</span>
+            </div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-gray-600">Công việc:</span>
+              <span class="font-bold">38/40</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Đánh giá:</span>
+              <span class="performance-badge performance-excellent"
+                >Xuất sắc</span
+              >
+            </div>
+          </div>
+
+          <!-- Employee 3 -->
+          <div class="employee-card">
+            <div class="flex items-center mb-4">
+              <img
+                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                alt="Lê Văn C"
+                class="w-16 h-16 rounded-full object-cover mr-4"
+              />
+              <div>
+                <h3 class="font-semibold text-gray-900">Lê Văn C</h3>
+                <span class="department-tag tag-marketing">Marketing</span>
+              </div>
+            </div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-gray-600">KPI:</span>
+              <span class="font-bold text-blue-600">88%</span>
+            </div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-gray-600">Công việc:</span>
+              <span class="font-bold">42/48</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Đánh giá:</span>
+              <span class="performance-badge performance-good">Tốt</span>
+            </div>
+          </div>
+
+          <!-- Employee 4 -->
+          <div class="employee-card">
+            <div class="flex items-center mb-4">
+              <img
+                src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                alt="Phạm Thị D"
+                class="w-16 h-16 rounded-full object-cover mr-4"
+              />
+              <div>
+                <h3 class="font-semibold text-gray-900">Phạm Thị D</h3>
+                <span class="department-tag tag-hr">Nhân sự</span>
+              </div>
+            </div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-gray-600">KPI:</span>
+              <span class="font-bold text-yellow-600">82%</span>
+            </div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-gray-600">Công việc:</span>
+              <span class="font-bold">36/42</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Đánh giá:</span>
+              <span class="performance-badge performance-average">Khá</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Task Completion Rate -->
+        <div class="chart-container">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">
+            Tỷ Lệ Hoàn Thành Công Việc
+          </h3>
+          <canvas id="completionChart" height="200"></canvas>
+        </div>
+
+        <!-- Overtime Analysis -->
+        <div class="chart-container">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">
+            Phân Tích Giờ Làm Thêm
+          </h3>
+          <canvas id="overtimeChart" height="200"></canvas>
+        </div>
+
+        <!-- Performance Distribution -->
+        <div class="chart-container">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">
+            Phân Phối Hiệu Suất
+          </h3>
+          <canvas id="performanceChart" height="200"></canvas>
+        </div>
+      </div>
+
+      <!-- Recent Activities -->
+      <div class="chart-container mt-8">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+          Hoạt Động Gần Đây
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b">
+                <th class="text-left py-3">Nhân viên</th>
+                <th class="text-left py-3">Hoạt động</th>
+                <th class="text-left py-3">Thời gian</th>
+                <th class="text-left py-3">Trạng thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b hover:bg-gray-50">
+                <td class="py-3">Nguyễn Văn A</td>
+                <td class="py-3">Hoàn thành dự án CRM</td>
+                <td class="py-3">12/07 14:30</td>
+                <td class="py-3">
+                  <span class="performance-badge performance-excellent"
+                    >Thành công</span
+                  >
+                </td>
+              </tr>
+              <tr class="border-b hover:bg-gray-50">
+                <td class="py-3">Trần Thị B</td>
+                <td class="py-3">Đạt chỉ tiêu doanh số</td>
+                <td class="py-3">12/07 12:15</td>
+                <td class="py-3">
+                  <span class="performance-badge performance-excellent"
+                    >Vượt mục tiêu</span
+                  >
+                </td>
+              </tr>
+              <tr class="border-b hover:bg-gray-50">
+                <td class="py-3">Lê Văn C</td>
+                <td class="py-3">Training kỹ năng mới</td>
+                <td class="py-3">11/07 16:45</td>
+                <td class="py-3">
+                  <span class="performance-badge performance-good"
+                    >Hoàn thành</span
+                  >
+                </td>
+              </tr>
+              <tr class="border-b hover:bg-gray-50">
+                <td class="py-3">Phạm Thị D</td>
+                <td class="py-3">Đánh giá nhân sự quý</td>
+                <td class="py-3">11/07 10:20</td>
+                <td class="py-3">
+                  <span class="performance-badge performance-average"
+                    >Đang tiến hành</span
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Initialize charts
+      document.addEventListener("DOMContentLoaded", function () {
+        // Productivity Trend Chart
+        const productivityCtx = document
+          .getElementById("productivityChart")
+          .getContext("2d");
+        new Chart(productivityCtx, {
+          type: "line",
+          data: {
+            labels: [
+              "Tháng 1",
+              "Tháng 2",
+              "Tháng 3",
+              "Tháng 4",
+              "Tháng 5",
+              "Tháng 6",
+            ],
+            datasets: [
+              {
+                label: "Năng suất trung bình",
+                data: [82, 85, 88, 84, 87, 89],
+                borderColor: "#3b82f6",
+                backgroundColor: "rgba(59, 130, 246, 0.1)",
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                min: 75,
+                max: 100,
+                grid: {
+                  drawBorder: false,
+                },
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+          },
+        });
+
+        // Department Comparison Chart
+        const departmentCtx = document
+          .getElementById("departmentChart")
+          .getContext("2d");
+        new Chart(departmentCtx, {
+          type: "bar",
+          data: {
+            labels: [
+              "Phát triển",
+              "Kinh doanh",
+              "Marketing",
+              "Nhân sự",
+              "Tài chính",
+            ],
+            datasets: [
+              {
+                label: "Điểm năng suất",
+                data: [89, 92, 85, 88, 83],
+                backgroundColor: [
+                  "#3b82f6",
+                  "#10b981",
+                  "#ec4899",
+                  "#f59e0b",
+                  "#8b5cf6",
+                ],
+                borderRadius: 6,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100,
+                grid: {
+                  drawBorder: false,
+                },
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+          },
+        });
+
+        // Completion Rate Chart
+        const completionCtx = document
+          .getElementById("completionChart")
+          .getContext("2d");
+        new Chart(completionCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Hoàn thành", "Đang thực hiện", "Chưa bắt đầu"],
+            datasets: [
+              {
+                data: [78, 15, 7],
+                backgroundColor: ["#10b981", "#f59e0b", "#ef4444"],
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            cutout: "70%",
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+        });
+
+        // Overtime Analysis Chart
+        const overtimeCtx = document
+          .getElementById("overtimeChart")
+          .getContext("2d");
+        new Chart(overtimeCtx, {
+          type: "pie",
+          data: {
+            labels: ["Dưới 10h", "10-20h", "20-30h", "Trên 30h"],
+            datasets: [
+              {
+                data: [45, 30, 15, 10],
+                backgroundColor: ["#10b981", "#3b82f6", "#f59e0b", "#ef4444"],
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+        });
+
+        // Performance Distribution Chart
+        const performanceCtx = document
+          .getElementById("performanceChart")
+          .getContext("2d");
+        new Chart(performanceCtx, {
+          type: "polarArea",
+          data: {
+            labels: ["Xuất sắc", "Tốt", "Khá", "Trung bình"],
+            datasets: [
+              {
+                data: [25, 40, 25, 10],
+                backgroundColor: ["#16a34a", "#2563eb", "#d97706", "#6b7280"],
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+        });
+
+        // Simulate progress bars animation
+        setTimeout(() => {
+          document.querySelectorAll(".progress-bar").forEach((bar) => {
+            bar.style.transition = "width 2s ease-in-out";
+          });
+        }, 500);
+      });
+    </script>
+  </main>
+</html>
