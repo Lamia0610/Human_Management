@@ -444,7 +444,8 @@
           </p>
         </div>
 
-        <form class="space-y-6">
+        <form class="space-y-6" action="/apply" method="post">
+          <!-- Họ tên + Email -->
           <div class="grid md:grid-cols-2 gap-6">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2"
@@ -452,6 +453,7 @@
               >
               <input
                 type="text"
+                name="fullName"
                 required
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -462,12 +464,14 @@
               >
               <input
                 type="email"
+                name="email"
                 required
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
 
+          <!-- SĐT + Vị trí -->
           <div class="grid md:grid-cols-2 gap-6">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2"
@@ -475,6 +479,7 @@
               >
               <input
                 type="tel"
+                name="phone"
                 required
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -484,6 +489,8 @@
                 >Vị Trí Ứng Tuyển *</label
               >
               <select
+                name="position"
+                required
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Chọn vị trí...</option>
@@ -495,53 +502,105 @@
             </div>
           </div>
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2"
-              >CV của bạn *</label
-            >
-            <div
-              class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center"
-            >
-              <div class="mb-4">
-                <span class="text-3xl">📄</span>
-              </div>
-              <p class="text-gray-600 mb-2">
-                Kéo thả file vào đây hoặc click để chọn
-              </p>
-              <p class="text-sm text-gray-500">PDF, DOC, DOCX (tối đa 5MB)</p>
-              <input type="file" class="hidden" id="cv-upload" />
-              <button
-                type="button"
-                onclick="document.getElementById('cv-upload').click()"
-                class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          <!-- Thêm ngày sinh + giới tính -->
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Ngày Sinh *</label
               >
-                Chọn File
-              </button>
+              <input
+                type="date"
+                name="dob"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Giới Tính *</label
+              >
+              <select
+                name="gender"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Chọn giới tính...</option>
+                <option value="male">Nam</option>
+                <option value="female">Nữ</option>
+                <option value="other">Khác</option>
+              </select>
             </div>
           </div>
 
+          <!-- Địa chỉ -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >Địa Chỉ *</label
+            >
+            <input
+              type="text"
+              name="address"
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố"
+            />
+          </div>
+
+          <!-- Trình độ học vấn -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >Trình Độ Học Vấn *</label
+            >
+            <input
+              type="text"
+              name="education"
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Ví dụ: Cử nhân CNTT - Đại học Giao Thông Vận Tải TP.HCM"
+            />
+          </div>
+
+          <!-- CV: đổi thành ô text nhập link -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >Link CV *</label
+            >
+            <input
+              type="text"
+              name="cvLink"
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Dán link Google Drive / OneDrive CV của bạn..."
+            />
+          </div>
+
+          <!-- Cover letter -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2"
               >Thư Giới Thiệu</label
             >
             <textarea
               rows="4"
+              name="coverLetter"
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Giới thiệu ngắn gọn về bản thân và kinh nghiệm..."
             ></textarea>
           </div>
 
+          <!-- Agree -->
           <div class="flex items-center">
             <input
               type="checkbox"
               id="agree"
+              required
               class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            <label for="agree" class="ml-2 text-sm text-gray-700"
-              >Tôi đồng ý với các điều khoản và chính sách bảo mật</label
-            >
+            <label for="agree" class="ml-2 text-sm text-gray-700">
+              Tôi đồng ý với các điều khoản và chính sách bảo mật
+            </label>
           </div>
 
+          <!-- Submit -->
           <button
             type="submit"
             class="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors animate-pulse"
@@ -599,39 +658,66 @@
     </div>
 
     <script>
-      // Xử lý form ứng tuyển
       document.addEventListener("DOMContentLoaded", function () {
         const form = document.querySelector("form");
-        const fileInput = document.getElementById("cv-upload");
+        const fileInput = document.getElementById("cvFileInput");
 
-        form.addEventListener("submit", function (e) {
+        form.addEventListener("submit", async function (e) {
           e.preventDefault();
 
-          // Kiểm tra form hợp lệ
-          const name = form.querySelector('input[type="text"]').value;
-          const email = form.querySelector('input[type="email"]').value;
-          const phone = form.querySelector('input[type="tel"]').value;
-          const position = form.querySelector("select").value;
+          // Lấy dữ liệu từ form
+          const name = form
+            .querySelector('input[name="fullName"]')
+            .value.trim();
+          const email = form.querySelector('input[name="email"]').value.trim();
+          const phone = form.querySelector('input[name="phone"]').value.trim();
+          const position = form.querySelector('select[name="position"]').value;
+          const coverLetter = form.querySelector('textarea[name="coverLetter"]')
+            ? form.querySelector('textarea[name="coverLetter"]').value.trim()
+            : "";
           const agree = form.querySelector('input[type="checkbox"]').checked;
 
+          // Kiểm tra form
           if (!name || !email || !phone || !position || !agree) {
             alert("Vui lòng điền đầy đủ thông tin và đồng ý với điều khoản!");
             return;
           }
-
           if (!fileInput.files.length) {
             alert("Vui lòng tải lên CV của bạn!");
             return;
           }
 
-          // Mô phỏng gửi form thành công
-          alert(
-            "Đơn ứng tuyển của bạn đã được gửi thành công! Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất."
-          );
-          form.reset();
+          // Chuẩn bị dữ liệu gửi backend
+          const formData = new FormData();
+          formData.append("fullName", name);
+          formData.append("email", email);
+          formData.append("phone", phone);
+          formData.append("position", position);
+          formData.append("coverLetter", coverLetter);
+          formData.append("cvFile", fileInput.files[0]); // phải trùng @RequestParam("cvFile") backend
+
+          try {
+            const response = await fetch(
+              "http://localhost:8080/api/applications",
+              {
+                method: "POST",
+                body: formData,
+              }
+            );
+
+            if (response.ok) {
+              alert("Đơn ứng tuyển của bạn đã được gửi thành công!");
+              form.reset();
+            } else {
+              const errorText = await response.text();
+              alert("Có lỗi xảy ra khi gửi đơn: " + errorText);
+            }
+          } catch (error) {
+            alert("Lỗi kết nối tới server: " + error.message);
+          }
         });
 
-        // Xử lý hiển thị tên file khi chọn
+        // Hiển thị tên file CV khi chọn
         fileInput.addEventListener("change", function () {
           if (this.files.length) {
             const fileName = this.files[0].name;
@@ -639,21 +725,18 @@
           }
         });
 
-        // Xử lý nút ứng tuyển trên các job card
+        // Nút "Ứng tuyển" trong job-card → tự động set vị trí vào form
         document.querySelectorAll(".job-card button").forEach((button) => {
           button.addEventListener("click", function () {
             const jobTitle =
               this.closest(".job-card").querySelector("h3").textContent;
-            const select = form.querySelector("select");
+            const select = form.querySelector('select[name="position"]');
             const option = Array.from(select.options).find((opt) =>
-              opt.text.includes(jobTitle.split(" ")[0])
+              jobTitle.toLowerCase().includes(opt.text.toLowerCase())
             );
-
             if (option) {
               select.value = option.value;
             }
-
-            // Scroll đến form
             form.closest(".apply-form").scrollIntoView({
               behavior: "smooth",
               block: "start",
