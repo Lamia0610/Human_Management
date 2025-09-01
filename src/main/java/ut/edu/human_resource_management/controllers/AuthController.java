@@ -12,192 +12,144 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AuthController {
-    
+
     @Autowired
     private NhanVienRepository nhanVienRepository;
 
     @GetMapping("/login")
     public String showLoginForm() {
-        return "LoginPage"; // Trả về trang HTML
+        return "LoginPage"; // file LoginPage.html
     }
 
     @PostMapping("/login")
-    public String processLogin(@RequestParam String email, 
-                               @RequestParam String mat_khau, 
-                               HttpSession session, 
+    public String processLogin(@RequestParam String email,
+                               @RequestParam(name = "mat_khau") String mat_khau,
+                               HttpSession session,
                                Model model) {
-        NhanVien nhanVien = nhanVienRepository.findByEmail(email);
-        
-        if (nhanVien == null) {
+        // --- admin cứng ---
+        final String ADMIN_EMAIL = "admin@example.com";
+        final String ADMIN_PASS  = "Admin@123";
+
+        if (ADMIN_EMAIL.equals(email) && ADMIN_PASS.equals(mat_khau)) {
+            session.setAttribute("admin", true);
+            // bạn đặt url admin nào hợp lý thì redirect về đó
+            return "redirect:/admin/admin_home";
+        }
+
+        // --- nhân viên từ DB ---
+        NhanVien nv = nhanVienRepository.findByEmail(email);
+        if (nv == null) {
             model.addAttribute("error", "Email không tồn tại.");
-            return "LoginPage"; 
+            return "LoginPage";
         }
 
-        if (!mat_khau.equals(nhanVien.getMatKhau())) {
+        // Nếu mật khẩu của bạn đang dùng BCrypt thì đổi check sang passwordEncoder.matches(...)
+        if (!mat_khau.equals(nv.getMatKhau())) {
             model.addAttribute("error", "Mật khẩu không đúng.");
-            return "LoginPage"; 
+            return "LoginPage";
         }
 
-        // ✅ Lưu userId vào session
-        session.setAttribute("userId", nhanVien.getId());
-        System.out.println("Đăng nhập thành công, lưu session với userId = " + nhanVien.getId());
+        // Lưu session cho nhân viên
+        session.setAttribute("userId", nv.getId());
+        // tuỳ bạn muốn lưu full object:
+        session.setAttribute("nhanVien", nv);
 
         return "redirect:/employees";
     }
 
     @GetMapping("/logout")
-        public String logout(HttpSession session) {
-            session.invalidate(); 
-            return "redirect:/index";
-        }
-            
-     @GetMapping("/employees")    
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
+
+    // Hiển thị trang employees (chỉ cho user đã login)
+    @GetMapping("/employees")
     public String showEmployees(HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
-        System.out.println("Session userId = " + userId);
-
         if (userId == null) {
-            return "redirect:/login"; 
+            return "redirect:/login";
         }
 
-        NhanVien nhanVien = nhanVienRepository.findById(userId).orElse(null);
-        if (nhanVien != null) {
-            model.addAttribute("nhanVien", nhanVien);
+        NhanVien nv = nhanVienRepository.findById(userId).orElse(null);
+        if (nv != null) {
+            model.addAttribute("nhanVien", nv);
             return "employees";
         } else {
             return "redirect:/login";
         }
     }
 
-
-    // @GetMapping("/attendance")
-    // public String showAttendance(HttpSession session, Model model) {
-    //     Long userId = (Long) session.getAttribute("userId");
-    //     System.out.println("Session userId = " + userId);
-
-    //     if (userId == null) {
-    //         return "redirect:/login"; 
-    //     }
-
-    //     NhanVien nhanVien = nhanVienRepository.findById(userId).orElse(null);
-    //     if (nhanVien != null) {
-    //         model.addAttribute("nhanVien", nhanVien);
-    //         return "attendance";
-    //     } else {
-    //         return "redirect:/login";
-    //     }
-    // }
-
+    // Các trang khác của user (copy pattern trên, dùng tên biến nv để tránh trùng)
     @GetMapping("/document")
     public String showDocument(HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
-        System.out.println("Session userId = " + userId);
+        if (userId == null) return "redirect:/login";
 
-        if (userId == null) {
-            return "redirect:/login"; 
-        }
-
-        NhanVien nhanVien = nhanVienRepository.findById(userId).orElse(null);
-        if (nhanVien != null) {
-            model.addAttribute("nhanVien", nhanVien);
-            return "document"; 
-        } else {
-            return "redirect:/login";
-        }
+        NhanVien nv = nhanVienRepository.findById(userId).orElse(null);
+        if (nv != null) {
+            model.addAttribute("nhanVien", nv);
+            return "document";
+        } else return "redirect:/login";
     }
 
     @GetMapping("/productivity")
-    public String showProductivity(HttpSession session, Model model) {  
+    public String showProductivity(HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
-        System.out.println("Session userId = " + userId);
+        if (userId == null) return "redirect:/login";
 
-        if (userId == null) {
-            return "redirect:/login"; 
-        }
-
-        NhanVien nhanVien = nhanVienRepository.findById(userId).orElse(null);
-        if (nhanVien != null) {
-            model.addAttribute("nhanVien", nhanVien);
-            return "productivity"; 
-        } else {
-            return "redirect:/login";
-        }
+        NhanVien nv = nhanVienRepository.findById(userId).orElse(null);
+        if (nv != null) {
+            model.addAttribute("nhanVien", nv);
+            return "productivity";
+        } else return "redirect:/login";
     }
 
     @GetMapping("/training")
-    public String showTraining(HttpSession session, Model model) {          
+    public String showTraining(HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
-        System.out.println("Session userId = " + userId);
+        if (userId == null) return "redirect:/login";
 
-        if (userId == null) {
-            return "redirect:/login"; 
-        }
-
-        NhanVien nhanVien = nhanVienRepository.findById(userId).orElse(null);
-        if (nhanVien != null) {
-            model.addAttribute("nhanVien", nhanVien);
-            return "training"; 
-        } else {
-            return "redirect:/login";
-        }
+        NhanVien nv = nhanVienRepository.findById(userId).orElse(null);
+        if (nv != null) {
+            model.addAttribute("nhanVien", nv);
+            return "training";
+        } else return "redirect:/login";
     }
 
-
     @GetMapping("/upload")
-    public String showUpload(HttpSession session, Model model) {          
+    public String showUpload(HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
-        System.out.println("Session userId = " + userId);
+        if (userId == null) return "redirect:/login";
 
-        if (userId == null) {
-            return "redirect:/login"; 
-        }
-
-        NhanVien nhanVien = nhanVienRepository.findById(userId).orElse(null);
-        if (nhanVien != null) {
-            model.addAttribute("nhanVien", nhanVien);
-            return "upload"; 
-        } else {
-            return "redirect:/login";
-        }
+        NhanVien nv = nhanVienRepository.findById(userId).orElse(null);
+        if (nv != null) {
+            model.addAttribute("nhanVien", nv);
+            return "upload";
+        } else return "redirect:/login";
     }
 
     @GetMapping("/home")
-    public String showHome(HttpSession session, Model model) {        
+    public String showHome(HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
-        System.out.println("Session userId = " + userId);
+        if (userId == null) return "redirect:/login";
 
-        if (userId == null) {
-            return "redirect:/login"; 
-        }
-
-        NhanVien nhanVien = nhanVienRepository.findById(userId).orElse(null);
-        if (nhanVien != null) {
-            model.addAttribute("nhanVien", nhanVien);
-            return "home"; 
-        } else {
-            return "redirect:/login";
-        }
+        NhanVien nv = nhanVienRepository.findById(userId).orElse(null);
+        if (nv != null) {
+            model.addAttribute("nhanVien", nv);
+            return "home";
+        } else return "redirect:/login";
     }
 
     @GetMapping("/newspaper")
-    public String showNewspaper(HttpSession session, Model model) {        
+    public String showNewspaper(HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
-        System.out.println("Session userId = " + userId);
+        if (userId == null) return "redirect:/login";
 
-        if (userId == null) {
-            return "redirect:/login"; 
-        }
-
-        NhanVien nhanVien = nhanVienRepository.findById(userId).orElse(null);
-        if (nhanVien != null) {
-            model.addAttribute("nhanVien", nhanVien);
-            return "newspaper"; 
-        } else {
-            return "redirect:/login";
-        }
+        NhanVien nv = nhanVienRepository.findById(userId).orElse(null);
+        if (nv != null) {
+            model.addAttribute("nhanVien", nv);
+            return "newspaper";
+        } else return "redirect:/login";
     }
-
-
 }
-
-

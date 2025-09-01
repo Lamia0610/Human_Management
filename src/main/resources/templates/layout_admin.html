@@ -255,13 +255,13 @@
         </div>
         <div class="auth-buttons">
           <a
-            th:if="${session.userId == null}"
+            th:if="${session.admin == null}"
             th:href="@{/login}"
             class="btn-auth"
             >Đăng nhập</a
           >
           <a
-            th:if="${session.userId != null}"
+            th:if="${session.admin != null}"
             th:href="@{/logout}"
             class="btn-auth"
             >Đăng xuất</a
@@ -274,52 +274,52 @@
       <nav class="sidebar-nav">
         <div class="sidebar-group">
           <div class="sidebar-title">Bảng điều khiển</div>
-          <a th:href="@{/admin_introduce}" class="sidebar-link">
+          <a th:href="@{/admin/admin_introduce}" class="sidebar-link">
             <i class="fa-solid fa-building"></i>
             <span>Giới thiệu</span>
           </a>
-          <a th:href="@{/admin_home}" class="sidebar-link">
+          <a th:href="@{/admin/admin_home}" class="sidebar-link">
             <i class="fas fa-tachometer-alt"></i>
             <span>Tổng quan</span>
           </a>
         </div>
         <div class="sidebar-group">
           <div class="sidebar-title">Quản lý nhân viên</div>
-          <a th:href="@{/admin_employees}" class="sidebar-link">
+          <a th:href="@{/admin/admin_employees}" class="sidebar-link">
             <i class="fas fa-users"></i>
             <span>Nhân viên</span>
           </a>
-          <a th:href="@{/admin_recruitment}" class="sidebar-link">
+          <a th:href="@{/admin/admin_recruitment}" class="sidebar-link">
             <i class="fas fa-user-plus"></i>
             <span>Tuyển dụng</span>
           </a>
-          <a th:href="@{/admin_information}" class="sidebar-link">
+          <a th:href="@{/admin/admin_information}" class="sidebar-link">
             <i class="fas fa-id-card"></i>
             <span>Tiếp nhận thông tin</span>
           </a>
-          <a th:href="@{/admin_attendance}" class="sidebar-link">
+          <a th:href="@{/admin/admin_attendance}" class="sidebar-link">
             <i class="fas fa-clock"></i>
             <span>Chấm công</span>
           </a>
         </div>
         <div class="sidebar-group">
           <div class="sidebar-title">Phát triển</div>
-          <a th:href="@{/admin_productivity}" class="sidebar-link">
+          <a th:href="@{/admin/admin_productivity}" class="sidebar-link">
             <i class="fas fa-chart-line"></i>
             <span>Năng suất</span>
           </a>
-          <a th:href="@{/admin_training}" class="sidebar-link">
+          <a th:href="@{/admin/admin_training}" class="sidebar-link">
             <i class="fas fa-graduation-cap"></i>
             <span>Đào tạo</span>
           </a>
         </div>
         <div class="sidebar-group">
           <div class="sidebar-title">Quản trị</div>
-          <a th:href="@{/admin_document}" class="sidebar-link">
+          <a th:href="@{/admin/admin_document}" class="sidebar-link">
             <i class="fas fa-file-alt"></i>
             <span>Tài liệu</span>
           </a>
-          <a th:href="@{/admin_newspaper}" class="sidebar-link">
+          <a th:href="@{/admin/admin_newspaper}" class="sidebar-link">
             <i class="fa-solid fa-newspaper"></i>
             <span>Tin tức</span>
           </a>

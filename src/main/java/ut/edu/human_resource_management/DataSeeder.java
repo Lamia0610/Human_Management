@@ -97,19 +97,19 @@ public class DataSeeder implements CommandLineRunner {
 
         // Tạo dữ liệu chấm công chỉ khi bảng chấm công trống
         if (chamCongRepository.count() == 0) {
-            System.out.println("Bắt đầu tạo dữ liệu chấm công giả...");
-            
-            // Lấy tất cả nhân viên đã tồn tại trong database
+            System.out.println("Bắt đầu tạo dữ liệu chấm công giả cho tháng 8...");
+
             List<NhanVien> nhanVienList = nhanVienRepository.findAll();
 
             if (!nhanVienList.isEmpty()) {
-                // Tạo dữ liệu chấm công giả cho 10 ngày gần nhất
-                LocalDate endDate = LocalDate.now();
-                LocalDate startDate = endDate.minusDays(9);
+                int year = LocalDate.now().getYear();
+                LocalDate startDate = LocalDate.of(year, 8, 1);
+                LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
                 Random random = new Random();
 
                 for (NhanVien nhanVien : nhanVienList) {
                     for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+                        // Bỏ qua Thứ 7 (6) và Chủ Nhật (7)
                         if (date.getDayOfWeek().getValue() == 6 || date.getDayOfWeek().getValue() == 7) {
                             continue;
                         }
@@ -126,7 +126,8 @@ public class DataSeeder implements CommandLineRunner {
                         chamCongRepository.save(chamCong);
                     }
                 }
-                System.out.println("Đã tạo dữ liệu chấm công giả thành công cho " + nhanVienList.size() + " nhân viên trong 10 ngày làm việc gần nhất!");
+                System.out.println("Đã tạo dữ liệu chấm công giả thành công cho " 
+                    + nhanVienList.size() + " nhân viên trong tháng 8!");
             } else {
                 System.out.println("Không tìm thấy dữ liệu nhân viên, vui lòng nhập dữ liệu nhân viên trước.");
             }
