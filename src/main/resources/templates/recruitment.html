@@ -444,7 +444,7 @@
           </p>
         </div>
 
-        <form class="space-y-6" action="/apply" method="post">
+        <form class="space-y-6" action="/api/applications" method="post">
           <!-- Họ tên + Email -->
           <div class="grid md:grid-cols-2 gap-6">
             <div>
@@ -656,94 +656,22 @@
         </div>
       </div>
     </div>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const form = document.querySelector("form");
-        const fileInput = document.getElementById("cvFileInput");
-
-        form.addEventListener("submit", async function (e) {
-          e.preventDefault();
-
-          // Lấy dữ liệu từ form
-          const name = form
-            .querySelector('input[name="fullName"]')
-            .value.trim();
-          const email = form.querySelector('input[name="email"]').value.trim();
-          const phone = form.querySelector('input[name="phone"]').value.trim();
-          const position = form.querySelector('select[name="position"]').value;
-          const coverLetter = form.querySelector('textarea[name="coverLetter"]')
-            ? form.querySelector('textarea[name="coverLetter"]').value.trim()
-            : "";
-          const agree = form.querySelector('input[type="checkbox"]').checked;
-
-          // Kiểm tra form
-          if (!name || !email || !phone || !position || !agree) {
-            alert("Vui lòng điền đầy đủ thông tin và đồng ý với điều khoản!");
-            return;
-          }
-          if (!fileInput.files.length) {
-            alert("Vui lòng tải lên CV của bạn!");
-            return;
-          }
-
-          // Chuẩn bị dữ liệu gửi backend
-          const formData = new FormData();
-          formData.append("fullName", name);
-          formData.append("email", email);
-          formData.append("phone", phone);
-          formData.append("position", position);
-          formData.append("coverLetter", coverLetter);
-          formData.append("cvFile", fileInput.files[0]); // phải trùng @RequestParam("cvFile") backend
-
-          try {
-            const response = await fetch(
-              "http://localhost:8080/api/applications",
-              {
-                method: "POST",
-                body: formData,
-              }
-            );
-
-            if (response.ok) {
-              alert("Đơn ứng tuyển của bạn đã được gửi thành công!");
-              form.reset();
-            } else {
-              const errorText = await response.text();
-              alert("Có lỗi xảy ra khi gửi đơn: " + errorText);
-            }
-          } catch (error) {
-            alert("Lỗi kết nối tới server: " + error.message);
-          }
-        });
-
-        // Hiển thị tên file CV khi chọn
-        fileInput.addEventListener("change", function () {
-          if (this.files.length) {
-            const fileName = this.files[0].name;
-            alert(`Đã chọn file: ${fileName}`);
-          }
-        });
-
-        // Nút "Ứng tuyển" trong job-card → tự động set vị trí vào form
-        document.querySelectorAll(".job-card button").forEach((button) => {
-          button.addEventListener("click", function () {
-            const jobTitle =
-              this.closest(".job-card").querySelector("h3").textContent;
-            const select = form.querySelector('select[name="position"]');
-            const option = Array.from(select.options).find((opt) =>
-              jobTitle.toLowerCase().includes(opt.text.toLowerCase())
-            );
-            if (option) {
-              select.value = option.value;
-            }
-            form.closest(".apply-form").scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-          });
-        });
-      });
-    </script>
   </main>
+  <script>
+    document
+      .getElementById("applyForm")
+      .addEventListener("submit", function (e) {
+        e.preventDefault(); // chặn submit mặc định
+
+        fetch("/api/applications", {
+          method: "POST",
+          body: new FormData(this),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            alert(data.message); // hiện alert từ backend
+          })
+          .catch((err) => alert("Có lỗi xảy ra!"));
+      });
+  </script>
 </html>
